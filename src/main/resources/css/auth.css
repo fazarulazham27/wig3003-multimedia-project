@@ -1,0 +1,148 @@
+.left-panel {
+    -fx-background-color: #6B4B3A;
+    -fx-padding: 40;
+}
+
+.right-panel {
+    -fx-background-color: #F2E6D8;
+    -fx-padding: 40;
+}
+
+/* BRAND */
+.logo-icon {
+    -fx-font-size: 50px;
+    -fx-text-fill: #EADCCB;
+}
+
+.logo-title {
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F3E6D8;
+}
+
+.logo-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #D7BFA7;
+}
+
+/* CARD */
+.auth-card {
+    -fx-background-color: white;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0.2, 0, 6);
+    -fx-max-width: 360px;
+}
+
+/* TEXT */
+.card-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5A3C2E;
+}
+
+.card-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #8B6E5C;
+}
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5A3C2E;
+}
+
+/* INPUT */
+.input-box {
+    -fx-border-color: #B38A72;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 6 10 6 10;
+    -fx-max-width: infinity;
+}
+
+/* ICON */
+.input-icon {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7A5846;
+    -fx-min-width: 20px;
+    -fx-pref-width: 20px;
+}
+
+/* INPUT TEXT */
+.text-input {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
+    -fx-prompt-text-fill: #B8A79C;
+}
+
+/* BUTTON */
+.primary-btn {
+    -fx-background-color: #6B4B3A;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-pref-height: 40px;
+    -fx-max-width: infinity;
+}
+
+.primary-btn:hover {
+    -fx-background-color: #5A3C2E;
+}
+
+/* ERROR (NO SPACE RESERVED) */
+.error-text {
+    -fx-font-size: 11px;
+    -fx-text-fill: #D32F2F;
+}
+
+/* RED BORDER */
+.input-error {
+    -fx-border-color: #D32F2F;
+    -fx-border-width: 2;
+}
+
+/* LINKS */
+.bottom-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7A5846;
+}
+
+.bottom-link {
+    -fx-font-size: 12px;
+    -fx-text-fill: #5A3C2E;
+    -fx-font-weight: bold;
+}
+
+.status-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: red;
+}
+
+.popup-container {
+    -fx-background-color: #1f1f2e;
+    -fx-background-radius: 20;
+    -fx-padding: 20;
+}
+
+.popup-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.popup-message {
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 14px;
+    -fx-text-alignment: center;
+}
+
+.popup-button {
+    -fx-background-color: #6c5ce7;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-padding: 6 20 6 20;
+}

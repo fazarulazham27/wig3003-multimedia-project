@@ -11,17 +11,18 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/hello-view.fxml")
+                getClass().getResource("/fxml/login-view.fxml")
         );
 
-        Scene scene = new Scene(loader.load(), 100, 100);
+        Scene scene = new Scene(loader.load(), 1000, 600);
 
-        stage.setTitle("Multimedia Project");
+        stage.setTitle("PhotoManager");
         stage.setScene(scene);
-
-        stage.setMinWidth(300);
-        stage.setMinHeight(300);
-
+        stage.setResizable(false);
         stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
