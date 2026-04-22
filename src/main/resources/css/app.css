@@ -1,0 +1,116 @@
+
+/* ========== SIDEBAR / NAVIGATION ========== */
+
+.sidebar {
+    -fx-background-color: #6B4B3A;
+    -fx-padding: 0;
+    -fx-spacing: 0;
+}
+
+.nav-section-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #D7BFA7;
+    -fx-text-transform: uppercase;
+    -fx-letter-spacing: 1.5;
+    -fx-padding: 12 15 6 15;
+    -fx-cursor: default;
+}
+
+.nav-item {
+    -fx-padding: 12 15;
+    -fx-font-size: 13px;
+    -fx-text-fill: #F2E6D8;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.nav-item:hover {
+    -fx-background-color: #5A3C2E;
+}
+
+.nav-item-active {
+    -fx-background-color: #F2E6D8;
+    -fx-text-fill: #6B4B3A;
+    -fx-font-weight: bold;
+}
+
+.nav-item-active:hover {
+    -fx-background-color: #F2E6D8;
+}
+
+.nav-icon {
+    -fx-font-size: 16px;
+    -fx-padding: 0 8 0 0;
+}
+
+/* ========== MAIN LAYOUT ========== */
+
+.main-container {
+    -fx-background-color: #F2E6D8;
+    -fx-padding: 0;
+    -fx-spacing: 0;
+}
+
+.content-area {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 0;
+}
+
+/* ========== DIVIDER STYLING ========== */
+
+.split-pane {
+    -fx-padding: 0;
+}
+
+.split-pane:vertical .split-pane-divider {
+    -fx-padding: 0 1 0 1;
+    -fx-background-color: #E0D5C7;
+}
+
+.split-pane:horizontal .split-pane-divider {
+    -fx-padding: 1 0 1 0;
+    -fx-background-color: #E0D5C7;
+}
+
+/* ========== TEXT UTILITIES ========== */
+
+.text-muted {
+    -fx-text-fill: #8B6E5C;
+    -fx-font-size: 12px;
+}
+
+.text-primary {
+    -fx-text-fill: #5A3C2E;
+    -fx-font-size: 14px;
+}
+
+/* ========== BUTTONS ========== */
+
+.primary-btn {
+    -fx-background-color: #6B4B3A;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 20;
+}
+
+.primary-btn:hover {
+    -fx-background-color: #5A3C2E;
+}
+
+.secondary-btn {
+    -fx-background-color: #F2E6D8;
+    -fx-text-fill: #6B4B3A;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 20;
+    -fx-border-color: #D7BFA7;
+    -fx-border-width: 1;
+}
+
+.secondary-btn:hover {
+    -fx-background-color: #E8D5C7;
+}

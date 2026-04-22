@@ -60,7 +60,7 @@ public class LoginController {
     }
 
     public void goToDashboard() {
-        loadScene("/fxml/dashboard-view.fxml", "Dashboard", 1200, 800);
+        loadScene("/fxml/repository-view.fxml", "All Photos", 1200, 800);
     }
 
     private void loadScene(String path, String title, int w, int h) {
@@ -68,7 +68,10 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Stage stage = (Stage) emailField.getScene().getWindow();
 
-            stage.setScene(new Scene(loader.load(), w, h));
+            Scene newScene = new Scene(loader.load());
+            newScene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            
+            stage.setScene(newScene);
             stage.setTitle(title);
 
         } catch (Exception e) {

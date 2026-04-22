@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox styleClass="sidebar"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.wig3003.multimedia.controller.SideNavBarController"
+      prefWidth="200"
+      minWidth="150"
+      maxWidth="300"
+      spacing="0">
+
+    <!-- LIBRARY SECTION -->
+    <Label text="Library" styleClass="nav-section-label"/>
+
+    <Button text="📷 All Photos"
+            fx:id="allPhotosBtn"
+            styleClass="nav-item"
+            onAction="#onAllPhotosClick"
+            maxWidth="Infinity"/>
+
+    <Button text="📝 Annotated"
+            fx:id="annotatedBtn"
+            styleClass="nav-item"
+            onAction="#onAnnotatedClick"
+            maxWidth="Infinity"/>
+
+    <!-- QUICK ACCESS SECTION -->
+    <Label text="Quick Access" styleClass="nav-section-label"/>
+
+    <Button text="🎨 Create Mosaic"
+            fx:id="mosaicBtn"
+            styleClass="nav-item"
+            onAction="#onMosaicClick"
+            maxWidth="Infinity"/>
+
+    <Button text="🎬 Make Video"
+            fx:id="videoBtn"
+            styleClass="nav-item"
+            onAction="#onVideoClick"
+            maxWidth="Infinity"/>
+
+    <Button text="📤 Share Photos"
+            fx:id="sharePhotosBtn"
+            styleClass="nav-item"
+            onAction="#onSharePhotosClick"
+            maxWidth="Infinity"/>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+</VBox>
