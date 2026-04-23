@@ -7,7 +7,7 @@
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.wig3003.multimedia.controller.SignupController"
-      stylesheets="@../css/auth.css"
+      stylesheets="@../css/auth.css,@../css/app.css"
       prefWidth="1000" prefHeight="700">
 
     <VBox styleClass="left-panel" alignment="CENTER" spacing="15" prefWidth="500">

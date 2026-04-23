@@ -7,16 +7,15 @@
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.wig3003.multimedia.controller.LoginController"
-      stylesheets="@../css/auth.css"
-      prefWidth="1000" prefHeight="700">
+      stylesheets="@../css/auth.css,@../css/app.css">
 
-    <VBox styleClass="left-panel" alignment="CENTER" spacing="15" prefWidth="500">
+    <VBox styleClass="left-panel" alignment="CENTER" spacing="15" prefWidth="700">
         <Label text="📷" styleClass="logo-icon"/>
         <Label text="PhotoManager" styleClass="logo-title"/>
         <Label text="Organize, manage, and cherish your memories" styleClass="logo-subtitle"/>
     </VBox>
 
-    <VBox styleClass="right-panel" alignment="CENTER" spacing="18" prefWidth="500">
+    <VBox styleClass="right-panel" alignment="CENTER" spacing="18" prefWidth="900">
 
         <VBox styleClass="auth-card" spacing="8" alignment="TOP_LEFT">
 

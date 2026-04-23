@@ -97,7 +97,10 @@ public class SignupController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Stage stage = (Stage) emailField.getScene().getWindow();
 
-            stage.setScene(new Scene(loader.load(), w, h));
+            Scene newScene = new Scene(loader.load());
+            newScene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            
+            stage.setScene(newScene);
             stage.setTitle(title);
 
         } catch (Exception e) {

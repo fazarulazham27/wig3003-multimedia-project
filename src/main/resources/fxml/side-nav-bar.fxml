@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.shape.Circle?>
+
+<VBox styleClass="sidebar"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.wig3003.multimedia.controller.SideNavBarController"
+      prefWidth="300"
+      minWidth="150"
+      maxWidth="300"
+      spacing="0">
+
+    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="sidebar-logo-area">
+        <padding>
+            <Insets top="34" right="20" bottom="30" left="20"/>
+        </padding>
+        <ImageView fitWidth="50" fitHeight="50" preserveRatio="true">
+            <image>
+                <Image url="@../images/gallery-icon.png"/>
+            </image>
+            <clip>
+                <Circle radius="25" centerX="25" centerY="25"/>
+            </clip>
+        </ImageView>
+        <Label text="PhotoManager"
+            style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+    </HBox>
+
+    <Separator style="-fx-background-color: #D7BFA7;"/>
+
+    <!-- LIBRARY SECTION -->
+    <Label text="Library" styleClass="nav-section-label"/>
+
+    <Button text="📷 All Photos"
+            fx:id="allPhotosBtn"
+            styleClass="nav-item"
+            onAction="#onAllPhotosClick"
+            maxWidth="Infinity"/>
+
+    <Button text="📝 Annotated"
+            fx:id="annotatedBtn"
+            styleClass="nav-item"
+            onAction="#onAnnotatedClick"
+            maxWidth="Infinity"/>
+
+    <!-- QUICK ACCESS SECTION -->
+    <Label text="Quick Access" styleClass="nav-section-label"/>
+
+    <Button text="🎨 Create Mosaic"
+            fx:id="mosaicBtn"
+            styleClass="nav-item"
+            onAction="#onMosaicClick"
+            maxWidth="Infinity"/>
+
+    <Button text="🎬 Make Video"
+            fx:id="videoBtn"
+            styleClass="nav-item"
+            onAction="#onVideoClick"
+            maxWidth="Infinity"/>
+
+    <Button text="📤 Share Photos"
+            fx:id="sharePhotosBtn"
+            styleClass="nav-item"
+            onAction="#onSharePhotosClick"
+            maxWidth="Infinity"/>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+</VBox>

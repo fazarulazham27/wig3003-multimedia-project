@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.wig3003.multimedia.controller.VideoController"
+      stylesheets="@../css/app.css"
+      spacing="0">
+
+    <!-- SIDE NAVIGATION BAR -->
+    <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
+
+    <!-- MAIN CONTENT AREA -->
+    <VBox fx:id="contentArea" styleClass="content-area" spacing="20" HBox.hgrow="ALWAYS">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <Label text="Make Video" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+        <Label text="Create and edit videos from your photos" styleClass="text-muted"/>
+        
+        <Separator/>
+        
+        <Label text="Video creation interface" styleClass="text-primary"/>
+    </VBox>
+
+</HBox>
