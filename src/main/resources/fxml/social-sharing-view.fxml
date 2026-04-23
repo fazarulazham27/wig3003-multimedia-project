@@ -11,79 +11,20 @@
       spacing="0">
 
     <!-- SIDE NAVIGATION BAR -->
-    <fx:include source="side-nav-bar.fxml"/>
+    <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
 
     <!-- MAIN CONTENT AREA -->
-    <VBox styleClass="content-area" spacing="20" HBox.hgrow="ALWAYS">
+    <VBox fx:id="contentArea" styleClass="content-area" spacing="20" HBox.hgrow="ALWAYS">
         <padding>
             <Insets top="20" right="20" bottom="20" left="20"/>
         </padding>
 
-        <!-- HEADER -->
-        <VBox spacing="8">
-            <Label text="Share Photos" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
-            <Label text="Upload, organize, and share your photo collections"
-                   styleClass="text-muted"/>
-        </VBox>
-
-        <!-- CONTENT DIVIDER -->
+        <Label text="Share Photos" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+        <Label text="Upload, organize, and share your photo collections" styleClass="text-muted"/>
+        
         <Separator/>
-
-        <!-- MAIN CONTENT PLACEHOLDER -->
-        <VBox spacing="15" VBox.vgrow="ALWAYS">
-            <HBox spacing="15" VBox.vgrow="ALWAYS">
-                <!-- LEFT PANEL - UPLOAD AREA -->
-                <VBox styleClass="content-panel"
-                      spacing="15"
-                      style="-fx-border-color: #E0D5C7; -fx-border-width: 1; -fx-border-radius: 8; -fx-padding: 20;"
-                      HBox.hgrow="ALWAYS"
-                      VBox.vgrow="ALWAYS">
-
-                    <Label text="Upload Photos" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
-
-                    <!-- DRAG AND DROP AREA -->
-                    <VBox alignment="CENTER"
-                          spacing="10"
-                          style="-fx-border-color: #D7BFA7; -fx-border-width: 2 2 2 2; -fx-border-style: dashed; -fx-border-radius: 8; -fx-padding: 40; -fx-background-color: #F9F7F4;"
-                          VBox.vgrow="ALWAYS">
-                        <Label text="📁" style="-fx-font-size: 48px;"/>
-                        <Label text="Drag and drop photos here"
-                               style="-fx-font-size: 14px; -fx-text-fill: #5A3C2E; -fx-font-weight: bold;"/>
-                        <Label text="or click to browse" styleClass="text-muted"/>
-                    </VBox>
-
-                    <Button text="Select Files" styleClass="primary-btn" maxWidth="Infinity"/>
-
-                </VBox>
-
-                <!-- RIGHT PANEL - PREVIEW/PROPERTIES -->
-                <VBox styleClass="content-panel"
-                      spacing="15"
-                      style="-fx-border-color: #E0D5C7; -fx-border-width: 1; -fx-border-radius: 8; -fx-padding: 20;"
-                      HBox.hgrow="ALWAYS"
-                      prefWidth="300">
-
-                    <Label text="Properties" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
-
-                    <VBox spacing="8">
-                        <Label text="Collection Name" styleClass="text-primary"/>
-                        <TextField promptText="Enter collection name" style="-fx-padding: 8; -fx-font-size: 12px;"/>
-                    </VBox>
-
-                    <VBox spacing="8">
-                        <Label text="Description" styleClass="text-primary"/>
-                        <TextArea promptText="Add a description..." wrapText="true" prefRowCount="4" style="-fx-padding: 8; -fx-font-size: 12px;"/>
-                    </VBox>
-
-                    <CheckBox text="Make Public" selected="false" style="-fx-font-size: 12px;"/>
-
-                    <Button text="Create Collection" styleClass="primary-btn" maxWidth="Infinity"/>
-                    <Button text="Cancel" styleClass="secondary-btn" maxWidth="Infinity"/>
-
-                </VBox>
-            </HBox>
-        </VBox>
-
+        
+        <Label text="Photo sharing interface" styleClass="text-primary"/>
     </VBox>
 
 </HBox>

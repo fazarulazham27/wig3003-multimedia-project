@@ -11,10 +11,10 @@
       spacing="0">
 
     <!-- SIDE NAVIGATION BAR -->
-    <fx:include source="side-nav-bar.fxml"/>
+    <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
 
     <!-- MAIN CONTENT AREA -->
-    <VBox styleClass="content-area" spacing="20" HBox.hgrow="ALWAYS">
+    <VBox fx:id="contentArea" styleClass="content-area" spacing="20" HBox.hgrow="ALWAYS">
         <padding>
             <Insets top="20" right="20" bottom="20" left="20"/>
         </padding>

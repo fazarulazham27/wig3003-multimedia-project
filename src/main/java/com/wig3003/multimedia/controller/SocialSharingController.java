@@ -4,9 +4,17 @@ import javafx.fxml.FXML;
 
 public class SocialSharingController {
 
+    private SideNavBarController sideNavBarController;
+
     @FXML
     public void initialize() {
-        // Initialize the social sharing module
-        System.out.println("Social Sharing module loaded");
+        System.out.println("SocialSharingController init");
+        System.out.println("sideNavBarController is: " + sideNavBarController);
+        
+        if (sideNavBarController != null) {
+            sideNavBarController.setActiveModuleButton("social");
+        } else {
+            System.out.println("ERROR: sideNavBarController is NULL");
+        }
     }
 }

@@ -19,9 +19,11 @@ public class SideNavBarController {
 
     @FXML
     public void initialize() {
-        // FIX 1: active button - Set "Share Photos" as active by default (for social module)
-        // Other modules will have this called fresh, so we always start with Share Photos active
-        setActiveButton(sharePhotosBtn);
+        allPhotosBtn.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                setActiveModuleButton("repo", "all");
+            }
+        });
     }
 
     /**
@@ -29,7 +31,7 @@ public class SideNavBarController {
      */
     @FXML
     public void onAllPhotosClick() {
-        setActiveButton(allPhotosBtn);
+        // setActiveButton(allPhotosBtn);
         switchModule("repo", "all");
     }
 
@@ -38,7 +40,7 @@ public class SideNavBarController {
      */
     @FXML
     public void onAnnotatedClick() {
-        setActiveButton(annotatedBtn);
+        // setActiveButton(annotatedBtn);
         switchModule("repo", "annotated");
     }
 
@@ -47,8 +49,8 @@ public class SideNavBarController {
      */
     @FXML
     public void onMosaicClick() {
-        setActiveButton(mosaicBtn);
-        switchModule("mosaic");
+        // setActiveButton(mosaicBtn);
+        switchModule("mosaic", null);
     }
 
     /**
@@ -56,8 +58,8 @@ public class SideNavBarController {
      */
     @FXML
     public void onVideoClick() {
-        setActiveButton(videoBtn);
-        switchModule("video");
+        // setActiveButton(videoBtn);
+        switchModule("video", null);
     }
 
     /**
@@ -65,39 +67,15 @@ public class SideNavBarController {
      */
     @FXML
     public void onSharePhotosClick() {
-        setActiveButton(sharePhotosBtn);
-        switchModule("social");
+        // setActiveButton(sharePhotosBtn);
+        switchModule("social", null);
     }
-
-    /**
-     * Update the active button styling
-     */
+    
     private void setActiveButton(Button button) {
-        // FIX 1: active button - Properly deactivate all buttons first
-        if (allPhotosBtn != null) {
-            allPhotosBtn.getStyleClass().removeAll("nav-item", "nav-item-active");
-            allPhotosBtn.getStyleClass().add("nav-item");
+        for (Button btn : new Button[]{allPhotosBtn, annotatedBtn, mosaicBtn, videoBtn, sharePhotosBtn}) {
+            btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #F2E6D8; -fx-font-weight: normal; -fx-background-insets: 0; -fx-background-radius: 0; -fx-border-width: 0; -fx-padding: 12 15; -fx-cursor: hand;");
         }
-        if (annotatedBtn != null) {
-            annotatedBtn.getStyleClass().removeAll("nav-item", "nav-item-active");
-            annotatedBtn.getStyleClass().add("nav-item");
-        }
-        if (mosaicBtn != null) {
-            mosaicBtn.getStyleClass().removeAll("nav-item", "nav-item-active");
-            mosaicBtn.getStyleClass().add("nav-item");
-        }
-        if (videoBtn != null) {
-            videoBtn.getStyleClass().removeAll("nav-item", "nav-item-active");
-            videoBtn.getStyleClass().add("nav-item");
-        }
-        if (sharePhotosBtn != null) {
-            sharePhotosBtn.getStyleClass().removeAll("nav-item", "nav-item-active");
-            sharePhotosBtn.getStyleClass().add("nav-item");
-        }
-        
-        // FIX 1: active button - Set the clicked button as active
-        button.getStyleClass().removeAll("nav-item", "nav-item-active");
-        button.getStyleClass().add("nav-item-active");
+        button.setStyle("-fx-background-color: #F2E6D8; -fx-text-fill: #6B4B3A; -fx-font-weight: bold; -fx-background-insets: 0; -fx-background-radius: 0; -fx-border-width: 0; -fx-padding: 12 15;");
         activeButton = button;
     }
 
@@ -110,50 +88,66 @@ public class SideNavBarController {
 
     /**
      * Switch to a module with optional filter parameter
+     * FIXED: Keep the nav bar alive — only swap center content
      */
     private void switchModule(String moduleName, String filter) {
         try {
             String fxmlPath = switch (moduleName) {
-                case "repo" -> "/fxml/repository-view.fxml";
+                case "repo"   -> "/fxml/repository-view.fxml";
                 case "mosaic" -> "/fxml/mosaic-view.fxml";
-                case "video" -> "/fxml/video-view.fxml";
+                case "video"  -> "/fxml/video-view.fxml";
                 case "social" -> "/fxml/social-sharing-view.fxml";
-                default -> "/fxml/dashboard-view.fxml";
+                default       -> "/fxml/repository-view.fxml";
             };
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Stage stage = (Stage) allPhotosBtn.getScene().getWindow();
-            Scene newScene = new Scene(loader.load());
-            newScene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
-
-            // If there's a controller that needs the filter, pass it
-            if (filter != null) {
-                Object controller = loader.getController();
-                if (controller instanceof IFilterableModule) {
-                    ((IFilterableModule) controller).applyFilter(filter);
-                }
+            Object newModuleRoot = loader.load();
+            
+            // Get the current root HBox (which has nav bar at index 0, content at index 1)
+            javafx.scene.layout.HBox root = (javafx.scene.layout.HBox) allPhotosBtn.getScene().getRoot();
+            
+            // Apply filter to new module controller if needed
+            Object controller = loader.getController();
+            if (filter != null && controller instanceof IFilterableModule) {
+                ((IFilterableModule) controller).applyFilter(filter);
             }
-
-            stage.setScene(newScene);
-            stage.setTitle("PhotoManager - " + moduleName);
-
+            
+            // Extract center content from the newly loaded module
+            // The new module is also an HBox: [nav bar (unused), content area]
+            if (newModuleRoot instanceof javafx.scene.layout.HBox newHBox && newHBox.getChildren().size() > 1) {
+                javafx.scene.Node newCenter = newHBox.getChildren().get(1);
+                newHBox.getChildren().remove(newCenter);
+                
+                // Replace the center content in the current root (keep nav bar at index 0)
+                root.getChildren().set(1, newCenter);
+            }
+            
+            // Update THIS SideNavBarController instance (the one on screen)
+            // setActiveButton(getButtonForModule(moduleName));
+            setActiveModuleButton(moduleName, filter);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setActiveModuleButton(String moduleName) {
+        setActiveModuleButton(moduleName, null);
     }
 
     /**
      * Set the active menu item to the given module name
      * This is called when entering a module to highlight the correct nav item
      */
-    public void setActiveModule(String moduleName) {
-        switch (moduleName) {
-            case "repo" -> setActiveButton(allPhotosBtn);
-            case "mosaic" -> setActiveButton(mosaicBtn);
-            case "video" -> setActiveButton(videoBtn);
-            case "social" -> setActiveButton(sharePhotosBtn);
-            default -> setActiveButton(sharePhotosBtn);
-        }
+    public void setActiveModuleButton(String moduleName, String filter) {
+        Button target = switch (moduleName) {
+            case "mosaic" -> mosaicBtn;
+            case "video"  -> videoBtn;
+            case "social" -> sharePhotosBtn;
+            case "repo"   -> "annotated".equals(filter) ? annotatedBtn : allPhotosBtn;
+            default       -> allPhotosBtn;
+        };
+        setActiveButton(target);
     }
 
     /**
