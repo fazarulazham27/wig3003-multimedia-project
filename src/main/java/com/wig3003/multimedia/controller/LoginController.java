@@ -1,11 +1,15 @@
 package com.wig3003.multimedia.controller;
 
 import com.wig3003.multimedia.service.AuthService;
+import com.wig3003.multimedia.service.SessionManager;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class LoginController {
@@ -46,7 +50,8 @@ public class LoginController {
         String response = AuthService.login(email, password);
 
         if (AuthService.isSuccess(response)) {
-            goToDashboard();
+            SessionManager.setEmail(email);
+            goToDashboard(email);
         } else {
             showAlert("Login Failed", "Invalid email or password");
         }
@@ -56,23 +61,55 @@ public class LoginController {
 
     @FXML
     public void goToSignup() {
-        loadScene("/fxml/signup-view.fxml", "Signup Page", 1000, 700);
+        loadScene("/fxml/signup-view.fxml", "Signup Page");
     }
 
-    public void goToDashboard() {
-        loadScene("/fxml/repository-view.fxml", "All Photos", 1200, 800);
-    }
-
-    private void loadScene(String path, String title, int w, int h) {
+    public void goToDashboard(String email) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/fxml/repository-view.fxml")
+            );
+
+            Rectangle2D screen = Screen.getPrimary().getVisualBounds();
             Stage stage = (Stage) emailField.getScene().getWindow();
 
-            Scene newScene = new Scene(loader.load());
-            newScene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
-            
+            Scene newScene = new Scene(loader.load(),
+                screen.getWidth(), screen.getHeight());
+            newScene.getStylesheets().add(
+                getClass().getResource("/css/app.css").toExternalForm()
+            );
+
+            // Pass email to SocialSharingController if it is the loaded controller
+            // If repository loads first, store email in a shared session instead
+            Object controller = loader.getController();
+            if (controller instanceof SocialSharingController socialCtrl) {
+                socialCtrl.setLoggedInEmail(email);
+            }
+
+            stage.setScene(newScene);
+            stage.setTitle("PhotoManager");
+            stage.setMaximized(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadScene(String path, String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+            Rectangle2D screen = Screen.getPrimary().getVisualBounds();
+            Stage stage = (Stage) emailField.getScene().getWindow();
+
+            Scene newScene = new Scene(loader.load(),
+                screen.getWidth(), screen.getHeight());
+            newScene.getStylesheets().add(
+                getClass().getResource("/css/app.css").toExternalForm()
+            );
+
             stage.setScene(newScene);
             stage.setTitle(title);
+            stage.setMaximized(true);
 
         } catch (Exception e) {
             e.printStackTrace();

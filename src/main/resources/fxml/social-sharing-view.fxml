@@ -10,21 +10,181 @@
       stylesheets="@../css/app.css"
       spacing="0">
 
-    <!-- SIDE NAVIGATION BAR -->
     <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
 
-    <!-- MAIN CONTENT AREA -->
     <VBox fx:id="contentArea" styleClass="content-area" spacing="20" HBox.hgrow="ALWAYS">
-        <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
-        </padding>
+        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-        <Label text="Share Photos" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
-        <Label text="Upload, organize, and share your photo collections" styleClass="text-muted"/>
-        
+        <!-- HEADER -->
+        <Label text="Share Photos"
+               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+        <Label text="Send your photos via Email or WhatsApp"
+               styleClass="text-muted"/>
         <Separator/>
-        
-        <Label text="Photo sharing interface" styleClass="text-primary"/>
-    </VBox>
+               
+        <!-- WHITE CARD WRAPPER -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 16;
+                     -fx-border-radius: 16; -fx-border-color: #E8DDD5;
+                     -fx-border-width: 1; -fx-effect: dropshadow(gaussian, #00000015, 12, 0, 0, 2);"
+              VBox.vgrow="ALWAYS">
 
+            <!-- CUSTOM TAB BAR -->
+            <HBox spacing="0"
+                  style="-fx-background-color: #FAF6F2; -fx-background-radius: 16 16 0 0;
+                         -fx-border-color: transparent transparent #E8DDD5 transparent;
+                         -fx-border-width: 0 0 1 0; -fx-padding: 16 20 0 20;">
+                <Button fx:id="emailTabBtn" text="📧  Email"
+                        onAction="#switchToEmail"
+                        style="-fx-background-color: white; -fx-text-fill: #5A3C2E;
+                               -fx-font-weight: bold; -fx-font-size: 13px;
+                               -fx-background-radius: 10 10 0 0; -fx-border-radius: 10 10 0 0;
+                               -fx-border-color: #E8DDD5 #E8DDD5 transparent #E8DDD5;
+                               -fx-border-width: 1; -fx-padding: 10 24; -fx-cursor: hand;"/>
+                <Button fx:id="waTabBtn" text="💬  WhatsApp"
+                        onAction="#switchToWhatsApp"
+                        style="-fx-background-color: transparent; -fx-text-fill: #8B6E5C;
+                               -fx-font-size: 13px; -fx-background-radius: 10 10 0 0;
+                               -fx-border-radius: 10 10 0 0; -fx-border-color: transparent;
+                               -fx-border-width: 1; -fx-padding: 10 24; -fx-cursor: hand;"/>
+            </HBox>
+
+            <!-- STACK — EMAIL / WHATSAPP panels -->
+            <StackPane VBox.vgrow="ALWAYS">
+
+                <!-- ── EMAIL PANEL ── -->
+                <ScrollPane fx:id="emailPanel" fitToWidth="true"
+                            style="-fx-background-color: transparent; -fx-background: transparent;">
+                    <VBox spacing="18">
+                        <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+
+                        <!-- FROM (read-only, auto-filled) -->
+                        <VBox spacing="6">
+                            <Label text="From" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #8B6E5C;"/>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <TextField fx:id="senderEmailField" editable="false"
+                                        HBox.hgrow="ALWAYS"
+                                        style="-fx-background-color: #F5F0EB; -fx-text-fill: #8B6E5C;
+                                                -fx-border-color: #E8DDD5; -fx-border-radius: 8;
+                                                -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px;"/>
+                                <Button text="⚙ Reset" onAction="#onResetEmailConfig"
+                                        style="-fx-background-color: #F5F0EB; -fx-text-fill: #8B6E5C;
+                                            -fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                            -fx-background-radius: 8; -fx-padding: 10 14;
+                                            -fx-font-size: 12px; -fx-cursor: hand;"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- TO -->
+                        <VBox spacing="6">
+                            <Label text="To" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                            <TextField fx:id="recipientEmailField" promptText="friend@example.com"
+                                       style="-fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                              -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px;"/>
+                        </VBox>
+
+                        <!-- SUBJECT -->
+                        <VBox spacing="6">
+                            <Label text="Subject" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                            <TextField fx:id="emailSubjectField"
+                                       style="-fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                              -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px;"/>
+                        </VBox>
+
+                        <!-- MESSAGE -->
+                        <VBox spacing="6">
+                            <Label text="Message" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                            <TextArea fx:id="emailMessageArea" wrapText="true" prefRowCount="4"
+                                      style="-fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                             -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px;"/>
+                        </VBox>
+
+                        <!-- ATTACHMENTS -->
+                        <VBox spacing="8">
+                            <Label text="Attachments" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                            <HBox spacing="10">
+                                <Button text="📁  Browse Files" onAction="#onBrowseEmailAttachment"
+                                        style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
+                                               -fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                               -fx-background-radius: 8; -fx-padding: 9 18;
+                                               -fx-font-size: 13px; -fx-cursor: hand;"/>
+                                <Button text="🖼️  From All Photos" onAction="#onPickFromGalleryEmail"
+                                        style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
+                                               -fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                               -fx-background-radius: 8; -fx-padding: 9 18;
+                                               -fx-font-size: 13px; -fx-cursor: hand;"/>
+                            </HBox>
+                            <!-- Selected files list -->
+                            <VBox fx:id="emailAttachmentList" spacing="6"/>
+                            <Label fx:id="emailAttachHint" text="No files selected"
+                                   style="-fx-text-fill: #B0A090; -fx-font-size: 12px;"/>
+                        </VBox>
+
+                        <Label fx:id="emailStatusLabel" text="" wrapText="true"/>
+
+                        <Button text="Send Email  →" onAction="#onSendEmail"
+                                maxWidth="Infinity"
+                                style="-fx-background-color: #6B4B3A; -fx-text-fill: white;
+                                       -fx-font-size: 14px; -fx-font-weight: bold;
+                                       -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;"/>
+                    </VBox>
+                </ScrollPane>
+
+                <!-- ── WHATSAPP PANEL ── -->
+                <ScrollPane fx:id="waPanel" fitToWidth="true" visible="false" managed="false"
+                            style="-fx-background-color: transparent; -fx-background: transparent;">
+                    <VBox spacing="18">
+                        <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+
+                        <VBox spacing="6"
+                              style="-fx-background-color: #F0FBF4; -fx-background-radius: 10;
+                                     -fx-border-color: #A8DDB8; -fx-border-radius: 10;
+                                     -fx-border-width: 1; -fx-padding: 14;">
+                            <Label text="💡  How it works"
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2E7D4F; -fx-font-size: 13px;"/>
+                            <Label text="Clicking the button below opens WhatsApp Web in your browser with your message pre-filled. Paste your selected photos in the text box and send them."
+                                   wrapText="true"
+                                   style="-fx-text-fill: #3A6B4F; -fx-font-size: 12px;"/>
+                        </VBox>
+
+                        <!-- MESSAGE -->
+                        <VBox spacing="6">
+                            <Label text="Message" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                            <TextArea fx:id="waMessageArea" wrapText="true" prefRowCount="4"
+                                      style="-fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                             -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px;"/>
+                        </VBox>
+
+                        <!-- PHOTO SELECTION -->
+                        <VBox spacing="8">
+                            <Label text="Photos to Share" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                            <HBox spacing="10">
+                                <Button text="📁  Browse Files" onAction="#onBrowseWAPhotos"
+                                        style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
+                                               -fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                               -fx-background-radius: 8; -fx-padding: 9 18;
+                                               -fx-font-size: 13px; -fx-cursor: hand;"/>
+                                <Button text="🖼️  From All Photos" onAction="#onPickFromGalleryWA"
+                                        style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
+                                               -fx-border-color: #D7BFA7; -fx-border-radius: 8;
+                                               -fx-background-radius: 8; -fx-padding: 9 18;
+                                               -fx-font-size: 13px; -fx-cursor: hand;"/>
+                            </HBox>
+                            <VBox fx:id="waPhotoList" spacing="6"/>
+                            <Label fx:id="waPhotoHint" text="No photos selected"
+                                   style="-fx-text-fill: #B0A090; -fx-font-size: 12px;"/>
+                        </VBox>
+
+                        <Label fx:id="waStatusLabel" text="" wrapText="true"/>
+
+                        <Button text="Open WhatsApp Web  →" onAction="#onOpenWhatsAppWeb"
+                                maxWidth="Infinity"
+                                style="-fx-background-color: #5A3C2E; -fx-text-fill: white;
+                                       -fx-font-size: 14px; -fx-font-weight: bold;
+                                       -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;"/>
+                    </VBox>
+                </ScrollPane>
+
+            </StackPane>
+        </VBox>
+    </VBox>
 </HBox>
