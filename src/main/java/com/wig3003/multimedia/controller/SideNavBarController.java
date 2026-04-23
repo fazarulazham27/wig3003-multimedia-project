@@ -2,8 +2,6 @@ package com.wig3003.multimedia.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 
 public class SideNavBarController {
@@ -13,9 +11,6 @@ public class SideNavBarController {
     @FXML private Button mosaicBtn;
     @FXML private Button videoBtn;
     @FXML private Button sharePhotosBtn;
-
-    private Button activeButton;
-    private MainController mainController;
 
     @FXML
     public void initialize() {
@@ -76,19 +71,10 @@ public class SideNavBarController {
             btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #F2E6D8; -fx-font-weight: normal; -fx-background-insets: 0; -fx-background-radius: 0; -fx-border-width: 0; -fx-padding: 12 15; -fx-cursor: hand;");
         }
         button.setStyle("-fx-background-color: #F2E6D8; -fx-text-fill: #6B4B3A; -fx-font-weight: bold; -fx-background-insets: 0; -fx-background-radius: 0; -fx-border-width: 0; -fx-padding: 12 15;");
-        activeButton = button;
-    }
-
-    /**
-     * Switch to a module without filter parameter
-     */
-    private void switchModule(String moduleName) {
-        switchModule(moduleName, null);
     }
 
     /**
      * Switch to a module with optional filter parameter
-     * FIXED: Keep the nav bar alive — only swap center content
      */
     private void switchModule(String moduleName, String filter) {
         try {
@@ -122,8 +108,6 @@ public class SideNavBarController {
                 root.getChildren().set(1, newCenter);
             }
             
-            // Update THIS SideNavBarController instance (the one on screen)
-            // setActiveButton(getButtonForModule(moduleName));
             setActiveModuleButton(moduleName, filter);
             
         } catch (Exception e) {
