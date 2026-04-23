@@ -13,7 +13,7 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/repository-view.fxml")
+                getClass().getResource("/fxml/login-view.fxml")
         );
 
         Scene scene = new Scene(loader.load());
