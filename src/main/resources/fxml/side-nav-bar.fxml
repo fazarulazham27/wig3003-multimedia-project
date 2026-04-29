@@ -69,6 +69,12 @@
             styleClass="nav-item"
             onAction="#onSharePhotosClick"
             maxWidth="Infinity"/>
+    
+    <Button text="Edit Image"
+            fx:id="editImageBtn"
+            styleClass="nav-item"
+            onAction="#onEditImageClick"
+            maxWidth="Infinity"/>
 
     <Region VBox.vgrow="ALWAYS"/>
 

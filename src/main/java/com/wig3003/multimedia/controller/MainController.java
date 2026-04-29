@@ -34,6 +34,7 @@ public class MainController {
                 case "mosaic" -> "/fxml/mosaic-view.fxml";
                 case "video" -> "/fxml/video-view.fxml";
                 case "social" -> "/fxml/social-sharing-view.fxml";
+                case "dip" -> "/fxml/dip-view.fxml";
                 default -> "/fxml/dashboard-view.fxml";
             };
 

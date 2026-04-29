@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.wig3003.multimedia.controller.ObjectSelectionController"
+      stylesheets="@../css/app.css"
+      spacing="0">
+
+    <!-- SIDE BAR -->
+    <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
+
+    <!-- MAIN AREA -->
+    <VBox fx:id="contentArea" 
+          styleClass="dip-content"
+          spacing="20"
+          HBox.hgrow="ALWAYS">
+
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+        
+        <Label text="Object Selection Tool"
+               styleClass="dip-title"/>
+
+        <Label text="Click or drag on image to select region by color similarity"/>
+        
+        <!-- CENTER WRAPPER -->
+        <VBox alignment="CENTER"
+              maxHeight="800"
+              minHeight="750">
+            
+            <!-- SPLIT LAYOUT -->
+            <HBox spacing="30" alignment="CENTER"
+                  styleClass="image-card">
+
+                <!-- IMAGE AREA -->
+                <StackPane prefWidth="450"
+                           prefHeight="450" style="-fx-border-color: lightgray;">
+
+                    <ImageView fx:id="originalView"
+                               fitWidth="450"
+                               fitHeight="450"
+                               preserveRatio="true"/>
+
+                    <!-- IMPORTANT:
+                               Canvas is ON TOP -->
+                    <Canvas fx:id="overlayCanvas"
+                            width="450"
+                            height="450"
+                            mouseTransparent="false"/>
+                </StackPane>
+
+                <!-- RESULT -->
+                <StackPane prefWidth="450"
+                           prefHeight="450"
+                           style="-fx-border-color: lightgray;">
+
+                    <ImageView fx:id="resultView"
+                               fitWidth="450"
+                               fitHeight="450"
+                               preserveRatio="true"/>
+
+                </StackPane>
+
+
+
+            </HBox>
+            
+            <HBox spacing="10" alignment="CENTER" 
+                  >
+
+                <Button text="Undo"
+                        onAction="#undoBrush"
+                        styleClass="dip-btn"/>
+
+                <Button text="Clear"
+                        onAction="#clearBrush"
+                        styleClass="dip-btn"/>
+            
+                <Button text="Save Object"
+                        onAction="#saveObject"
+                        styleClass="dip-btn-secondary"/>
+
+            </HBox>
+        
+        </VBox>
+    </VBox>
+
+</HBox>

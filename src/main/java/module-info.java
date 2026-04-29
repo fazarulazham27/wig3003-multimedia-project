@@ -5,6 +5,7 @@ module com.wig3003.multimedia {
     requires java.desktop;
     requires java.net.http;
     requires jakarta.mail;
+    requires javafx.swing;
 
     opens com.wig3003.multimedia.app to javafx.fxml;
     opens com.wig3003.multimedia.controller to javafx.fxml;
