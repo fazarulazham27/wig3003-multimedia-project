@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- repository-view.fxml -->
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -24,7 +25,30 @@
         
         <Separator/>
         
-        <Label text="Repository content goes here" styleClass="text-primary"/>
+        <!-- WHITE CARD WRAPPER -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 16;
+                     -fx-border-radius: 16; -fx-border-color: #E8DDD5;
+                     -fx-border-width: 1; -fx-effect: dropshadow(gaussian, #00000015, 12, 0, 0, 2);"
+              VBox.vgrow="ALWAYS">
+
+            <!-- Scrollable Image Grid -->
+            <ScrollPane fx:id="imagePanel" fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-background: transparent;">
+                        <content>
+                            <VBox>
+                                <TilePane fx:id="imagesContainer" hgap="10" vgap="10"/>
+                            </VBox>
+                        </content>
+            </ScrollPane>
+
+            <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+            <Button fx:id="importButton" text="➕ Import Images" 
+                                                maxWidth="Infinity"
+                                                style="-fx-background-color: #5A3C2E; -fx-text-fill: white;
+                                                    -fx-font-size: 14px; -fx-font-weight: bold;
+                                                    -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;"/>
+              
+        </VBox>
     </VBox>
 
 </HBox>

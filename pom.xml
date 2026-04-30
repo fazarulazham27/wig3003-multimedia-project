@@ -71,7 +71,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>javafx.multimediaproject/com.wig3003.multimedia.app.MainApp</mainClass>
+                            <mainClass>com.wig3003.multimedia/com.wig3003.multimedia.app.MainApp</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
