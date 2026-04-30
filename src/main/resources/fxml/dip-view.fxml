@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.wig3003.multimedia.controller.DipController"
+      stylesheets="@/css/app.css"
+      spacing="0">
+
+    <!-- SIDE NAVIGATION BAR -->
+    <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
+
+    <!-- MAIN CONTENT AREA -->
+    <VBox fx:id="contentArea"
+          styleClass="dip-content"
+          spacing="20"
+          HBox.hgrow="ALWAYS">
+
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <Label text="Edit Image" styleClass="dip-title"/>
+
+        <!-- CENTER WRAPPER -->
+        <VBox alignment="CENTER"
+              maxHeight="800"
+              minHeight="750">
+
+            <!-- SPLIT LAYOUT -->
+            <HBox spacing="20"
+                  alignment="CENTER"
+                  styleClass="image-card">
+
+                <!-- LEFT: IMAGE (FIXED ROTATION SPACE) -->
+                <VBox fx:id="imageContainer"
+                      alignment="CENTER"
+                      VBox.vgrow="ALWAYS"
+                      minHeight="600"
+                      prefHeight="600"
+                      maxHeight="650">
+
+                    <StackPane alignment="CENTER">
+
+                        <ImageView fx:id="imageView"
+                                   fitWidth="500"
+                                   fitHeight="500"
+                                   preserveRatio="true"/>
+
+                    </StackPane>
+
+                </VBox>
+
+                <!-- RIGHT: CONTROLS -->
+                <VBox spacing="15"
+                      prefWidth="500"
+                      alignment="CENTER_LEFT" >
+
+                    <!-- CONTRAST -->
+                    <HBox spacing="10">
+                        <Label text="Contrast"
+                               alignment="CENTER"
+                               styleClass="chip-label"
+                               minWidth="120"
+                               prefWidth="120"
+                               maxWidth="120"/>
+
+                        <Slider fx:id="contrastSlider" min="-1" max="1" HBox.hgrow="ALWAYS"
+        maxWidth="Infinity"/>
+                    </HBox>
+
+                    <!-- BRIGHTNESS -->
+                    <HBox spacing="10">
+                        <Label text="Brightness"
+                               alignment="CENTER"
+                               styleClass="chip-label"
+                               minWidth="120"
+                               prefWidth="120"
+                               maxWidth="120"/>
+
+                        <Slider fx:id="brightnessSlider" min="-1" max="1" HBox.hgrow="ALWAYS"
+        maxWidth="Infinity"/>
+                    </HBox>
+
+                    <!-- FRAME -->
+                    <HBox spacing="10">
+                        <Label text="Frame"
+                               alignment="CENTER"
+                               styleClass="chip-label"
+                               minWidth="120"
+                               prefWidth="120"
+                               maxWidth="120"/>
+
+                        <Button text="Add/Remove Frame"
+                                onAction="#toggleFrame"
+                                styleClass="dip-btn"/>
+
+                        <Button text="Change Frame"
+                                onAction="#togglePolaroid"
+                                styleClass="dip-btn"/>
+                    </HBox>
+
+                    <!-- GRAYSCALE -->
+                    <HBox spacing="10">
+                        <Label text="Grayscale"
+                               alignment="CENTER"
+                               styleClass="chip-label"
+                               minWidth="120"
+                               prefWidth="120"
+                               maxWidth="120"/>
+
+                        <Button text="Gray"
+                                onAction="#applyGrayscale"
+                                styleClass="dip-btn"/>
+                    </HBox>
+
+                    <!-- TRANSFORM (CENTERED) -->
+                    <HBox alignment="CENTER"
+                          HBox.hgrow="ALWAYS"
+                          maxWidth="Infinity">
+
+                        <Label text="Transform"
+                               styleClass="chip-label"
+                               maxWidth="Infinity"
+                               alignment="CENTER"
+                               HBox.hgrow="ALWAYS"/>
+
+                    </HBox>
+
+                    <!-- TRANSFORM BUTTONS -->
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Rotate"
+                                onAction="#rotateImage"
+                                styleClass="dip-btn"/>
+
+                        <Button text="Flip Horizontal"
+                                onAction="#flipHorizontal"
+                                styleClass="dip-btn"/>
+
+                        <Button text="Flip Vertical"
+                                onAction="#flipVertical"
+                                styleClass="dip-btn"/>
+                    </HBox>
+
+                    <!-- OBJECT -->
+                    <HBox alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                        <Button text="Select Object"
+                                onAction="#openObjectSelection"
+                                styleClass="dip-btn-secondary"
+                                HBox.hgrow="ALWAYS"
+                                maxWidth="Infinity"/>
+                    </HBox>
+
+                    <!-- SAVE -->
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Revert"
+                                onAction="#revertImage"
+                                styleClass="dip-btn-secondary"/>
+
+                        <Button text="Save Edit"
+                                onAction="#saveEditedImage"
+                                styleClass="dip-btn-secondary"/>
+                    </HBox>
+
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+
+    </VBox>
+
+</HBox>

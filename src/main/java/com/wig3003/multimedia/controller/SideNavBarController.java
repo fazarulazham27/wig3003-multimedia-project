@@ -11,6 +11,7 @@ public class SideNavBarController {
     @FXML private Button mosaicBtn;
     @FXML private Button videoBtn;
     @FXML private Button sharePhotosBtn;
+    @FXML private Button editImageBtn;
 
     @FXML
     public void initialize() {
@@ -29,7 +30,7 @@ public class SideNavBarController {
         // setActiveButton(allPhotosBtn);
         switchModule("repo", "all");
     }
-
+    
     /**
      * Navigate to Repository module with "annotated" filter
      */
@@ -66,8 +67,14 @@ public class SideNavBarController {
         switchModule("social", null);
     }
     
+    @FXML
+    public void onEditImageClick() {
+        // setActiveButton(sharePhotosBtn);
+        switchModule("dip", null);
+    }
+    
     private void setActiveButton(Button button) {
-        for (Button btn : new Button[]{allPhotosBtn, annotatedBtn, mosaicBtn, videoBtn, sharePhotosBtn}) {
+        for (Button btn : new Button[]{allPhotosBtn, annotatedBtn, mosaicBtn, videoBtn, sharePhotosBtn,editImageBtn}) {
             btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #F2E6D8; -fx-font-weight: normal; -fx-background-insets: 0; -fx-background-radius: 0; -fx-border-width: 0; -fx-padding: 12 15; -fx-cursor: hand;");
         }
         button.setStyle("-fx-background-color: #F2E6D8; -fx-text-fill: #6B4B3A; -fx-font-weight: bold; -fx-background-insets: 0; -fx-background-radius: 0; -fx-border-width: 0; -fx-padding: 12 15;");
@@ -83,6 +90,7 @@ public class SideNavBarController {
                 case "mosaic" -> "/fxml/mosaic-view.fxml";
                 case "video"  -> "/fxml/video-view.fxml";
                 case "social" -> "/fxml/social-sharing-view.fxml";
+                case "dip"    -> "/fxml/dip-view.fxml";
                 default       -> "/fxml/repository-view.fxml";
             };
 
@@ -128,6 +136,7 @@ public class SideNavBarController {
             case "mosaic" -> mosaicBtn;
             case "video"  -> videoBtn;
             case "social" -> sharePhotosBtn;
+            case "dip" -> editImageBtn;
             case "repo"   -> "annotated".equals(filter) ? annotatedBtn : allPhotosBtn;
             default       -> allPhotosBtn;
         };
