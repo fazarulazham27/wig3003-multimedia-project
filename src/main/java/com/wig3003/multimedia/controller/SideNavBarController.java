@@ -2,6 +2,7 @@ package com.wig3003.multimedia.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.fxml.FXMLLoader;
 
 public class SideNavBarController {
@@ -120,6 +121,11 @@ public class SideNavBarController {
             
         } catch (Exception e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Navigation Error");
+            alert.setHeaderText("Failed to open module: " + moduleName);
+            alert.setContentText(e.getClass().getSimpleName() + ": " + e.getMessage());
+            alert.showAndWait();
         }
     }
 

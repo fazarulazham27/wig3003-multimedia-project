@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
@@ -10,21 +11,86 @@
       stylesheets="@../css/app.css"
       spacing="0">
 
-    <!-- SIDE NAVIGATION BAR -->
     <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
 
-    <!-- MAIN CONTENT AREA -->
     <VBox fx:id="contentArea" styleClass="content-area" spacing="20" HBox.hgrow="ALWAYS">
         <padding>
             <Insets top="20" right="20" bottom="20" left="20"/>
         </padding>
 
         <Label text="Create Mosaic" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
-        <Label text="Combine multiple photos into a mosaic" styleClass="text-muted"/>
-        
+        <Label text="Build a composite image from your imported photo collection." styleClass="text-muted"/>
+
         <Separator/>
-        
-        <Label text="Mosaic creation interface" styleClass="text-primary"/>
+
+        <HBox spacing="20" VBox.vgrow="ALWAYS">
+            <VBox spacing="14"
+                  prefWidth="360"
+                  style="-fx-background-color: white; -fx-background-radius: 16;
+                         -fx-border-radius: 16; -fx-border-color: #E8DDD5;
+                         -fx-border-width: 1; -fx-padding: 18;">
+
+                <Label text="Mosaic Settings" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                <Label fx:id="libraryCountLabel" text="Tile Library: 0 photos" styleClass="text-muted"/>
+
+                <Button text="Refresh Library" onAction="#onRefreshLibrary" maxWidth="Infinity"
+                        style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
+                               -fx-border-color: #D7BFA7; -fx-border-radius: 8; -fx-background-radius: 8;
+                               -fx-padding: 10 14; -fx-font-size: 13px; -fx-cursor: hand;"/>
+
+                <Button text="Choose Target Image" onAction="#onChooseTargetImage" maxWidth="Infinity"
+                        style="-fx-background-color: #5A3C2E; -fx-text-fill: white;
+                               -fx-font-size: 13px; -fx-font-weight: bold;
+                               -fx-background-radius: 8; -fx-padding: 10 14; -fx-cursor: hand;"/>
+                <Label fx:id="targetImageLabel" text="Target: (none selected)" wrapText="true" styleClass="text-muted"/>
+
+                <VBox spacing="8">
+                    <Label text="Tiles Across" style="-fx-text-fill: #5A3C2E; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                    <Spinner fx:id="tilesWideSpinner" editable="true" maxWidth="Infinity">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="20" max="180" initialValue="70" amountToStepBy="5"/>
+                        </valueFactory>
+                    </Spinner>
+                </VBox>
+
+                <VBox spacing="8">
+                    <Label text="Tile Size (pixels)" style="-fx-text-fill: #5A3C2E; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                    <Spinner fx:id="tileSizeSpinner" editable="true" maxWidth="Infinity">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="8" max="64" initialValue="16" amountToStepBy="2"/>
+                        </valueFactory>
+                    </Spinner>
+                </VBox>
+
+                <Button fx:id="generateButton" text="Generate Mosaic" onAction="#onGenerateMosaic" maxWidth="Infinity"
+                        style="-fx-background-color: #6B4B3A; -fx-text-fill: white;
+                               -fx-font-size: 14px; -fx-font-weight: bold;
+                               -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;"/>
+
+                <Button fx:id="saveButton" text="Save Mosaic As PNG" onAction="#onSaveMosaic" maxWidth="Infinity" disable="true"
+                        style="-fx-background-color: #2E7D4F; -fx-text-fill: white;
+                               -fx-font-size: 14px; -fx-font-weight: bold;
+                               -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;"/>
+
+                <ProgressIndicator fx:id="generationProgress" visible="false" managed="true" prefWidth="30" prefHeight="30"/>
+                <Label fx:id="statusLabel" text="" wrapText="true"/>
+            </VBox>
+
+            <VBox spacing="10" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 16;
+                         -fx-border-radius: 16; -fx-border-color: #E8DDD5;
+                         -fx-border-width: 1; -fx-padding: 16;">
+                <Label text="Mosaic Preview" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS"
+                            style="-fx-background-color: transparent; -fx-background: transparent;">
+                    <content>
+                        <StackPane style="-fx-background-color: #F7F1EB; -fx-padding: 10;" prefWidth="800" prefHeight="520">
+                            <ImageView fx:id="mosaicPreview" preserveRatio="true" smooth="true"/>
+                        </StackPane>
+                    </content>
+                </ScrollPane>
+            </VBox>
+        </HBox>
     </VBox>
 
 </HBox>

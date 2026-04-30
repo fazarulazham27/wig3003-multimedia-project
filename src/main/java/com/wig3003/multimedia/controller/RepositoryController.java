@@ -1,11 +1,11 @@
 package com.wig3003.multimedia.controller;
 
+import com.wig3003.multimedia.service.AnnotationService;
+import com.wig3003.multimedia.service.FavoritePhotoService;
+import com.wig3003.multimedia.service.PhotoLibraryService;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
-import java.util.Properties;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -30,19 +30,14 @@ public class RepositoryController implements SideNavBarController.IFilterableMod
     @FXML
     private TilePane imagesContainer;
 
-    private List<File> importedFiles;
-
     private String currentFilter = "All Photos";
 
     @FXML
     public void initialize() {
-        System.out.println("Repository module loaded");
-
         if (importButton != null) {
             importButton.setOnAction(event -> handleImportImages());
-        } else {
-            System.out.println("importButton is NULL ❌");
         }
+        refreshImages();
     }
 
     @FXML
@@ -50,57 +45,16 @@ public class RepositoryController implements SideNavBarController.IFilterableMod
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Images");
         fileChooser.getExtensionFilters().addAll(
-                new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"));
+                new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.webp"));
 
-        // List<File> files =
-        // fileChooser.showOpenMultipleDialog(importButton.getScene().getWindow());
-        importedFiles = fileChooser.showOpenMultipleDialog(importButton.getScene().getWindow());
-        List<File> files = importedFiles;
-
+        List<File> files = fileChooser.showOpenMultipleDialog(importButton.getScene().getWindow());
         if (files == null || files.isEmpty()) {
             return;
         }
 
-        for (File file : files) {
-            try {
-                Image image = new Image(file.toURI().toString());
-                ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(165);
-                imageView.setFitHeight(165);
-                imageView.setPreserveRatio(false);
-                imageView.setSmooth(true);
-                imageView.setCache(true);
-
-                // Add rounded corners
-                Rectangle clip = new Rectangle(165, 165);
-                clip.setArcWidth(30);
-                clip.setArcHeight(30);
-                imageView.setClip(clip);
-
-                // Make clickable
-                imageView.setOnMouseClicked(event -> showImageViewer(image, file.getAbsolutePath()));
-
-                if (hasAnnotation(file.getAbsolutePath())) {
-                    StackPane wrapper = new StackPane();
-                    wrapper.setPrefSize(165, 165);
-
-                    wrapper.getChildren().add(imageView);
-
-                    Text heart = new Text("❤");
-                    heart.setStyle("-fx-font-size: 20px; -fx-fill: red;");
-
-                    StackPane.setAlignment(heart, Pos.TOP_RIGHT);
-                    wrapper.getChildren().add(heart);
-
-                    imagesContainer.getChildren().add(wrapper);
-
-                } else {
-                    imagesContainer.getChildren().add(imageView);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        List<Path> paths = files.stream().map(File::toPath).toList();
+        PhotoLibraryService.addPhotos(paths);
+        refreshImages();
     }
 
     private void showImageViewer(Image image, String uri) {
@@ -119,59 +73,52 @@ public class RepositoryController implements SideNavBarController.IFilterableMod
         }
     }
 
-    private boolean hasAnnotation(String uri) {
-        Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream(
-                System.getProperty("user.home") + "/image_annotations.properties")) {
-            props.load(fis);
-            String value = props.getProperty(uri);
-            return value != null && !value.trim().isEmpty();
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
     private void refreshImages() {
         imagesContainer.getChildren().clear();
 
-        if (importedFiles == null)
-            return;
+        List<Path> library = PhotoLibraryService.getLibraryPhotos();
+        for (Path path : library) {
+            String absolutePath = path.toAbsolutePath().normalize().toString();
+            boolean hasAnnotation = AnnotationService.hasAnnotation(absolutePath);
 
-        for (File file : importedFiles) {
+            if ("Annotated".equalsIgnoreCase(currentFilter) && !hasAnnotation) {
+                continue;
+            }
+
             try {
-                boolean hasAnno = hasAnnotation(file.getAbsolutePath());
-
-                if ("Annotated".equalsIgnoreCase(currentFilter) && !hasAnno) {
-                    continue;
-                }
-
-                Image image = new Image(file.toURI().toString());
+                Image image = new Image(path.toUri().toString());
                 ImageView imageView = new ImageView(image);
                 imageView.setFitWidth(165);
                 imageView.setFitHeight(165);
+                imageView.setPreserveRatio(false);
+                imageView.setSmooth(true);
+                imageView.setCache(true);
 
                 Rectangle clip = new Rectangle(165, 165);
                 clip.setArcWidth(30);
                 clip.setArcHeight(30);
                 imageView.setClip(clip);
 
-                imageView.setOnMouseClicked(event -> showImageViewer(image, file.getAbsolutePath()));
+                imageView.setOnMouseClicked(event -> showImageViewer(image, absolutePath));
 
-                if (hasAnno) {
+                boolean favorite = FavoritePhotoService.isFavorite(absolutePath);
+                if (favorite) {
                     StackPane wrapper = new StackPane();
                     wrapper.setPrefSize(165, 165);
+                    wrapper.getChildren().add(imageView);
 
-                    Text heart = new Text("❤");
-                    heart.setStyle("-fx-font-size: 20px; -fx-fill: red;");
+                    Text favoriteTag = new Text("FAV");
+                    favoriteTag.setStyle("-fx-font-size: 11px; -fx-fill: #FFFFFF; -fx-font-weight: bold;");
+                    StackPane badge = new StackPane(favoriteTag);
+                    badge.setStyle("-fx-background-color: #A63A3A; -fx-background-radius: 999; -fx-padding: 4 8;");
 
-                    StackPane.setAlignment(heart, Pos.TOP_RIGHT);
-                    wrapper.getChildren().addAll(imageView, heart);
-
+                    StackPane.setAlignment(badge, Pos.TOP_RIGHT);
+                    StackPane.setMargin(badge, new javafx.geometry.Insets(8));
+                    wrapper.getChildren().add(badge);
                     imagesContainer.getChildren().add(wrapper);
                 } else {
                     imagesContainer.getChildren().add(imageView);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -182,14 +129,10 @@ public class RepositoryController implements SideNavBarController.IFilterableMod
     public void applyFilter(String filter) {
         currentFilter = filter;
 
-        System.out.println("Filter = [" + filter + "]");
-
         boolean isAllPhotos = filter != null && filter.toLowerCase().contains("all");
-
         importButton.setVisible(isAllPhotos);
         importButton.setManaged(isAllPhotos);
 
         refreshImages();
     }
 }
-

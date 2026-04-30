@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
@@ -10,21 +12,119 @@
       stylesheets="@../css/app.css"
       spacing="0">
 
-    <!-- SIDE NAVIGATION BAR -->
     <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
 
-    <!-- MAIN CONTENT AREA -->
     <VBox fx:id="contentArea" styleClass="content-area" spacing="20" HBox.hgrow="ALWAYS">
         <padding>
             <Insets top="20" right="20" bottom="20" left="20"/>
         </padding>
 
         <Label text="Make Video" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
-        <Label text="Create and edit videos from your photos" styleClass="text-muted"/>
-        
+        <Label text="Generate a playable sequence from favorite photos with text and graphics overlays." styleClass="text-muted"/>
+
         <Separator/>
-        
-        <Label text="Video creation interface" styleClass="text-primary"/>
+
+        <HBox spacing="20" VBox.vgrow="ALWAYS">
+            <VBox spacing="12" prefWidth="360"
+                  style="-fx-background-color: white; -fx-background-radius: 16;
+                         -fx-border-radius: 16; -fx-border-color: #E8DDD5;
+                         -fx-border-width: 1; -fx-padding: 16;">
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label fx:id="favoritesCountLabel" text="Favorites: 0 | Source: 0" style="-fx-font-size: 13px; -fx-text-fill: #8B6E5C;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Refresh Fav" onAction="#onRefreshFavorites"
+                            style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
+                                   -fx-border-color: #D7BFA7; -fx-border-radius: 8; -fx-background-radius: 8;
+                                   -fx-padding: 8 12; -fx-font-size: 12px; -fx-cursor: hand;"/>
+                </HBox>
+
+                <Label text="Video Source Photos" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                <ListView fx:id="favoriteListView" prefHeight="170" VBox.vgrow="ALWAYS"/>
+
+                <HBox spacing="8">
+                    <Button text="Add Photos" onAction="#onAddSourcePhotos" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                            style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
+                                   -fx-border-color: #D7BFA7; -fx-border-radius: 8; -fx-background-radius: 8;
+                                   -fx-padding: 9 10; -fx-font-size: 12px; -fx-cursor: hand;"/>
+                    <Button text="Load Favorites" onAction="#onLoadFavoritesToSource" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                            style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
+                                   -fx-border-color: #D7BFA7; -fx-border-radius: 8; -fx-background-radius: 8;
+                                   -fx-padding: 9 10; -fx-font-size: 12px; -fx-cursor: hand;"/>
+                </HBox>
+
+                <Button text="Remove Selected" onAction="#onRemoveSelectedSources" maxWidth="Infinity"
+                        style="-fx-background-color: #FAECEC; -fx-text-fill: #8A2D2D;
+                               -fx-border-color: #D8A8A8; -fx-border-radius: 8; -fx-background-radius: 8;
+                               -fx-padding: 9 10; -fx-font-size: 12px; -fx-cursor: hand;"/>
+
+                <Label text="Frame Duration (seconds)" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                <Slider fx:id="frameDurationSlider" min="0.75" max="6" value="2.5" showTickLabels="true" showTickMarks="true" majorTickUnit="1" minorTickCount="3"/>
+
+                <Label text="Text Overlay" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                <TextArea fx:id="overlayTextArea" prefRowCount="3" wrapText="true"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Text Color" styleClass="text-muted"/>
+                    <ColorPicker fx:id="textColorPicker"/>
+                    <Label text="Opacity" styleClass="text-muted"/>
+                    <Slider fx:id="textOpacitySlider" min="0" max="1" value="0.85" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <Label text="Graphic Overlay" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="graphicTypeCombo" HBox.hgrow="ALWAYS"/>
+                    <ColorPicker fx:id="graphicColorPicker"/>
+                </HBox>
+                <Slider fx:id="graphicOpacitySlider" min="0" max="1" value="0.35" showTickLabels="true" showTickMarks="true" majorTickUnit="0.25" minorTickCount="4"/>
+
+                <Button text="Generate Sequence" onAction="#onGenerateSequence" maxWidth="Infinity"
+                        style="-fx-background-color: #6B4B3A; -fx-text-fill: white;
+                               -fx-font-size: 14px; -fx-font-weight: bold;
+                               -fx-background-radius: 10; -fx-padding: 12; -fx-cursor: hand;"/>
+            </VBox>
+
+            <VBox spacing="12" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 16;
+                         -fx-border-radius: 16; -fx-border-color: #E8DDD5;
+                         -fx-border-width: 1; -fx-padding: 16;">
+
+                <Label text="Playback" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+
+                <StackPane style="-fx-background-color: #1F1A17; -fx-background-radius: 12; -fx-padding: 10;"
+                           VBox.vgrow="ALWAYS" prefHeight="450" alignment="CENTER">
+                    <ImageView fx:id="framePreview" fitWidth="900" fitHeight="460" preserveRatio="true" smooth="true"/>
+                    <StackPane fx:id="graphicOverlayLayer" pickOnBounds="false" mouseTransparent="false"
+                               prefWidth="900" prefHeight="460" maxWidth="900" maxHeight="460">
+                        <StackPane fx:id="overlayContent" pickOnBounds="true" mouseTransparent="false"
+                                   style="-fx-padding: 8;">
+                            <StackPane fx:id="overlayVisualLayer" pickOnBounds="false" mouseTransparent="true"/>
+                            <Label fx:id="textOverlayLabel"
+                                   text=""
+                                   wrapText="true"
+                                   maxWidth="620"
+                                   style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-alignment: center;"/>
+                        </StackPane>
+                    </StackPane>
+                </StackPane>
+
+                <HBox spacing="8" alignment="CENTER">
+                    <Button text="Play" onAction="#onPlay"
+                            style="-fx-background-color: #2E7D4F; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 18;"/>
+                    <Button text="Pause" onAction="#onPause"
+                            style="-fx-background-color: #B58B46; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 18;"/>
+                    <Button text="Stop" onAction="#onStop"
+                            style="-fx-background-color: #8A2D2D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 18;"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label fx:id="currentTimeLabel" text="00:00" style="-fx-text-fill: #5A3C2E; -fx-font-weight: bold;"/>
+                    <Slider fx:id="seekSlider" min="0" max="100" value="0" HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="totalTimeLabel" text="00:00" style="-fx-text-fill: #5A3C2E; -fx-font-weight: bold;"/>
+                </HBox>
+
+                <Label fx:id="statusLabel" text="" wrapText="true"/>
+            </VBox>
+        </HBox>
     </VBox>
 
 </HBox>

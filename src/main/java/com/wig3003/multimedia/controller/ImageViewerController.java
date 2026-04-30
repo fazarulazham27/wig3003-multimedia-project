@@ -1,18 +1,13 @@
 package com.wig3003.multimedia.controller;
 
+import com.wig3003.multimedia.service.AnnotationService;
+import com.wig3003.multimedia.service.FavoritePhotoService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Properties;
 
 public class ImageViewerController {
 
@@ -26,6 +21,9 @@ public class ImageViewerController {
     private Button saveAnnotationButton;
 
     @FXML
+    private Button favoriteButton;
+
+    @FXML
     private Button editImageButton;
 
     @FXML
@@ -37,6 +35,7 @@ public class ImageViewerController {
     @FXML
     public void initialize() {
         saveAnnotationButton.setOnAction(event -> saveAnnotation());
+        favoriteButton.setOnAction(event -> toggleFavorite());
         editImageButton.setOnAction(event -> editImage());
         shareImageButton.setOnAction(event -> shareImage());
     }
@@ -46,49 +45,50 @@ public class ImageViewerController {
         this.imageUri = uri;
         fullImageView.setImage(image);
         loadAnnotation();
+        refreshFavoriteState();
     }
 
     private void loadAnnotation() {
-        Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream(getAnnotationsFile())) {
-            props.load(fis);
-            String annotation = props.getProperty(imageUri, "");
-            annotationTextArea.setText(annotation);
-        } catch (IOException e) {
-            // File doesn't exist or error, ignore
-        }
+        annotationTextArea.setText(AnnotationService.getAnnotation(imageUri));
     }
 
     private void saveAnnotation() {
-        String annotation = annotationTextArea.getText();
-        Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream(getAnnotationsFile())) {
-            props.load(fis);
-        } catch (IOException e) {
-            // File doesn't exist, create new
-        }
-        props.setProperty(imageUri, annotation);
-        try (FileOutputStream fos = new FileOutputStream(getAnnotationsFile())) {
-            props.store(fos, "Image Annotations");
-        } catch (IOException e) {
+        try {
+            AnnotationService.saveAnnotation(imageUri, annotationTextArea.getText());
+            ((Stage) fullImageView.getScene().getWindow()).close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Annotation saved: " + annotation);
-        ((Stage) fullImageView.getScene().getWindow()).close();
-        fullImageView.getScene().getWindow().hide();
     }
 
-    private String getAnnotationsFile() {
-        return System.getProperty("user.home") + "/image_annotations.properties";
+    private void toggleFavorite() {
+        boolean newState = !FavoritePhotoService.isFavorite(imageUri);
+        FavoritePhotoService.setFavorite(imageUri, newState);
+        refreshFavoriteState();
+    }
+
+    private void refreshFavoriteState() {
+        boolean favorite = FavoritePhotoService.isFavorite(imageUri);
+        if (favorite) {
+            favoriteButton.setText("Remove From Favorites");
+            favoriteButton.setStyle(baseActionStyle("#8A2D2D"));
+        } else {
+            favoriteButton.setText("Add To Favorites");
+            favoriteButton.setStyle(baseActionStyle("#5A3C2E"));
+        }
+    }
+
+    private String baseActionStyle(String color) {
+        return "-fx-background-color: " + color + "; -fx-text-fill: white; "
+                + "-fx-font-size: 14px; -fx-font-weight: bold; "
+                + "-fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;";
     }
 
     private void editImage() {
-        // TODO: Open image in external editor
         System.out.println("Edit image clicked");
     }
 
     private void shareImage() {
-        // TODO: Implement sharing functionality
         System.out.println("Share image clicked");
     }
 }
