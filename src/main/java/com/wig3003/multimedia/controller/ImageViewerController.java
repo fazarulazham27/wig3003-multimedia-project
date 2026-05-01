@@ -1,13 +1,15 @@
 package com.wig3003.multimedia.controller;
 
 import com.wig3003.multimedia.service.AnnotationService;
-import com.wig3003.multimedia.service.FavoritePhotoService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import com.wig3003.multimedia.service.PhotoLibraryService;
+import java.nio.file.Path;
 
 public class ImageViewerController {
 
@@ -20,8 +22,6 @@ public class ImageViewerController {
     @FXML
     private Button saveAnnotationButton;
 
-    @FXML
-    private Button favoriteButton;
 
     @FXML
     private Button editImageButton;
@@ -29,15 +29,19 @@ public class ImageViewerController {
     @FXML
     private Button shareImageButton;
 
+    @FXML
+    private Button deleteImageButton;
+
     private Image currentImage;
     private String imageUri;
 
     @FXML
     public void initialize() {
         saveAnnotationButton.setOnAction(event -> saveAnnotation());
-        favoriteButton.setOnAction(event -> toggleFavorite());
+        // favoriteButton.setOnAction(event -> toggleFavorite());
         editImageButton.setOnAction(event -> editImage());
         shareImageButton.setOnAction(event -> shareImage());
+        deleteImageButton.setOnAction(event -> deleteImage());
     }
 
     public void setImage(Image image, String uri) {
@@ -45,7 +49,7 @@ public class ImageViewerController {
         this.imageUri = uri;
         fullImageView.setImage(image);
         loadAnnotation();
-        refreshFavoriteState();
+        // refreshFavoriteState();
     }
 
     private void loadAnnotation() {
@@ -61,23 +65,6 @@ public class ImageViewerController {
         }
     }
 
-    private void toggleFavorite() {
-        boolean newState = !FavoritePhotoService.isFavorite(imageUri);
-        FavoritePhotoService.setFavorite(imageUri, newState);
-        refreshFavoriteState();
-    }
-
-    private void refreshFavoriteState() {
-        boolean favorite = FavoritePhotoService.isFavorite(imageUri);
-        if (favorite) {
-            favoriteButton.setText("Remove From Favorites");
-            favoriteButton.setStyle(baseActionStyle("#8A2D2D"));
-        } else {
-            favoriteButton.setText("Add To Favorites");
-            favoriteButton.setStyle(baseActionStyle("#5A3C2E"));
-        }
-    }
-
     private String baseActionStyle(String color) {
         return "-fx-background-color: " + color + "; -fx-text-fill: white; "
                 + "-fx-font-size: 14px; -fx-font-weight: bold; "
@@ -90,5 +77,14 @@ public class ImageViewerController {
 
     private void shareImage() {
         System.out.println("Share image clicked");
+    }
+
+    private void deleteImage() {
+        try {
+            PhotoLibraryService.deletePhoto(Path.of(imageUri));
+            ((Stage) fullImageView.getScene().getWindow()).close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

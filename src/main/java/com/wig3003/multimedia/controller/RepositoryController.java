@@ -87,6 +87,7 @@ public class RepositoryController implements SideNavBarController.IFilterableMod
 
             try {
                 Image image = new Image(path.toUri().toString());
+
                 ImageView imageView = new ImageView(image);
                 imageView.setFitWidth(165);
                 imageView.setFitHeight(165);
@@ -99,26 +100,35 @@ public class RepositoryController implements SideNavBarController.IFilterableMod
                 clip.setArcHeight(30);
                 imageView.setClip(clip);
 
-                imageView.setOnMouseClicked(event -> showImageViewer(image, absolutePath));
+                // Create wrapper for every image
+                StackPane wrapper = new StackPane();
+                wrapper.setPrefSize(165, 165);
+                wrapper.setMaxSize(165, 165);
+                wrapper.setStyle("-fx-cursor: hand;");
 
-                boolean favorite = FavoritePhotoService.isFavorite(absolutePath);
-                if (favorite) {
-                    StackPane wrapper = new StackPane();
-                    wrapper.setPrefSize(165, 165);
-                    wrapper.getChildren().add(imageView);
+                wrapper.getChildren().add(imageView);
 
-                    Text favoriteTag = new Text("FAV");
-                    favoriteTag.setStyle("-fx-font-size: 11px; -fx-fill: #FFFFFF; -fx-font-weight: bold;");
-                    StackPane badge = new StackPane(favoriteTag);
-                    badge.setStyle("-fx-background-color: #A63A3A; -fx-background-radius: 999; -fx-padding: 4 8;");
+                // Make the whole tile clickable
+                wrapper.setOnMouseClicked(event -> showImageViewer(image, absolutePath));
 
-                    StackPane.setAlignment(badge, Pos.TOP_RIGHT);
-                    StackPane.setMargin(badge, new javafx.geometry.Insets(8));
-                    wrapper.getChildren().add(badge);
-                    imagesContainer.getChildren().add(wrapper);
-                } else {
-                    imagesContainer.getChildren().add(imageView);
+                if (hasAnnotation) {
+                    Text heartIcon = new Text("♥");
+                    heartIcon.setStyle(
+                            "-fx-font-size: 30px;" +
+                                    "-fx-fill: #D32F2F;" +
+                                    "-fx-font-weight: bold;");
+
+                    StackPane.setAlignment(heartIcon, Pos.TOP_RIGHT);
+                    StackPane.setMargin(heartIcon, new javafx.geometry.Insets(6));
+
+                    // Heart will not block image clicking
+                    heartIcon.setMouseTransparent(true);
+
+                    wrapper.getChildren().add(heartIcon);
                 }
+
+                imagesContainer.getChildren().add(wrapper);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

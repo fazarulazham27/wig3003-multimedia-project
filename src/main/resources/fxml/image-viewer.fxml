@@ -30,11 +30,11 @@
         <VBox spacing="10" alignment="CENTER">
             <Button fx:id="saveAnnotationButton" text="Save Annotation" maxWidth="Infinity" style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;
                                             -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;" />
-            <Button fx:id="favoriteButton" text="Add To Favorites" maxWidth="Infinity" style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;
-                                            -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;" />
             <Button fx:id="editImageButton" text="Edit Image" maxWidth="Infinity" style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;
                                             -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;" />
             <Button fx:id="shareImageButton" text="Share Image" maxWidth="Infinity" style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;
+                                            -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;" />
+            <Button fx:id="deleteImageButton" text="Delete Image" maxWidth="Infinity" style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;
                                             -fx-background-radius: 10; -fx-padding: 13; -fx-cursor: hand;" />
         </VBox>
     </VBox>

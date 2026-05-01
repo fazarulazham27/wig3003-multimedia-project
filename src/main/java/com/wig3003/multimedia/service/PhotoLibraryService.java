@@ -53,6 +53,19 @@ public final class PhotoLibraryService {
         saveProperties(props);
     }
 
+    public static void deletePhoto(Path path) {
+        if (path == null) {
+            return;
+        }
+
+        Properties props = loadProperties();
+        Path normalized = path.toAbsolutePath().normalize();
+
+        props.remove(normalized.toString());
+
+        saveProperties(props);
+    }
+
     private static Properties loadProperties() {
         Properties props = new Properties();
         if (Files.exists(LIBRARY_PATH)) {
