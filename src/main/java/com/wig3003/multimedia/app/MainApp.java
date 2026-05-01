@@ -9,8 +9,13 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
+    private static MainApp instance;
+    private Stage mainStage;
+
     @Override
     public void start(Stage stage) throws Exception {
+        instance = this;
+        this.mainStage = stage;
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/fxml/login-view.fxml")
@@ -33,6 +38,14 @@ public class MainApp extends Application {
         stage.show();
     }
 
+    public static MainApp getInstance() { 
+        return instance; 
+    }
+
+    public Stage getMainStage(){ 
+        return mainStage; 
+    }
+    
     public static void main(String[] args) {
         launch();
     }
