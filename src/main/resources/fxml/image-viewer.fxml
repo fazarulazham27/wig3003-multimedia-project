@@ -10,8 +10,8 @@
       fx:controller="com.wig3003.multimedia.controller.ImageViewerController"
       stylesheets="@../css/app.css"
       spacing="20"
-      prefWidth="800"
-      prefHeight="600"
+      prefWidth="1000"
+      prefHeight="700"
       style="-fx-background-color: #F2E6D8;">
 
     <padding>

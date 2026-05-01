@@ -123,3 +123,13 @@
 .secondary-btn:hover {
     -fx-background-color: #E8D5C7;
 }
+
+/* ========== SLIDER ========== */
+.slider .track {
+    -fx-background-color: #d2b48c;
+}
+
+.slider .thumb {
+    
+    -fx-background-color: #5a3e2b;
+}

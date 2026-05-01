@@ -9,7 +9,9 @@ import java.util.Queue;
 public class ObjectExtractor {
 
     private static class Point {
+
         int x, y;
+
         Point(int x, int y) {
             this.x = x;
             this.y = y;
@@ -27,11 +29,10 @@ public class ObjectExtractor {
         PixelWriter writer = output.getPixelWriter();
 
         boolean[][] visited = new boolean[width][height];
-
         Color seedColor = reader.getColor(startX, startY);
 
         // tolerance (the lower it is = stricter object selection)
-        double threshold = 0.20;
+        double threshold = 0.25;
 
         Queue<Point> queue = new LinkedList<>();
         queue.add(new Point(startX, startY));
@@ -43,40 +44,62 @@ public class ObjectExtractor {
 
             Color current = reader.getColor(p.x, p.y);
 
-            if (colorMatch(seedColor, current, threshold)) {
-                writer.setColor(p.x, p.y, current);
+            writer.setColor(p.x, p.y, current);
 
-                // 4-direction flood fill
-                addNeighbor(queue, visited, p.x + 1, p.y, width, height);
-                addNeighbor(queue, visited, p.x - 1, p.y, width, height);
-                addNeighbor(queue, visited, p.x, p.y + 1, width, height);
-                addNeighbor(queue, visited, p.x, p.y - 1, width, height);
+            checkNeighbor(queue, visited, reader, seedColor, current,
+                    p.x + 1, p.y, width, height, threshold);
 
-            } else {
-                writer.setColor(p.x, p.y, Color.TRANSPARENT);
-            }
+            checkNeighbor(queue, visited, reader, seedColor, current,
+                    p.x - 1, p.y, width, height, threshold);
+
+            checkNeighbor(queue, visited, reader, seedColor, current,
+                    p.x, p.y + 1, width, height, threshold);
+
+            checkNeighbor(queue, visited, reader, seedColor, current,
+                    p.x, p.y - 1, width, height, threshold);
         }
 
         return output;
     }
 
-    private static void addNeighbor(Queue<Point> queue,
-                                    boolean[][] visited,
-                                    int x, int y,
-                                    int width, int height) {
-
+    private static void checkNeighbor(
+            Queue<Point> queue,
+            boolean[][] visited,
+            PixelReader reader,
+            Color seedColor,
+            Color currentColor,
+            int x, int y,
+            int width, int height,
+            double threshold
+    ) {
         if (x >= 0 && y >= 0 && x < width && y < height && !visited[x][y]) {
-            visited[x][y] = true;
-            queue.add(new Point(x, y));
+
+            Color neighbor = reader.getColor(x, y);
+
+            boolean closeToSeed
+                    = colorMatch(seedColor, neighbor, threshold);
+
+            boolean closeToCurrent
+                    = colorMatch(currentColor, neighbor, threshold);
+
+            if (closeToSeed && closeToCurrent) {
+                visited[x][y] = true;
+                queue.add(new Point(x, y));
+            }
         }
     }
 
     private static boolean colorMatch(Color a, Color b, double threshold) {
 
-        double diff =
-                Math.abs(a.getRed() - b.getRed()) +
-                Math.abs(a.getGreen() - b.getGreen()) +
-                Math.abs(a.getBlue() - b.getBlue());
+        double dr = a.getRed() - b.getRed();
+        double dg = a.getGreen() - b.getGreen();
+        double db = a.getBlue() - b.getBlue();
+
+        double diff = Math.sqrt(
+                dr * dr
+                + dg * dg
+                + db * db
+        );
 
         return diff < threshold;
     }

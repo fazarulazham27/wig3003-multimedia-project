@@ -5,173 +5,195 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.wig3003.multimedia.controller.DipController"
-      stylesheets="@/css/app.css"
-      spacing="0">
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.wig3003.multimedia.controller.DipController"
+            stylesheets="@/css/app.css" style="-fx-background-color: #F2E6D8;">
 
-    <!-- SIDE NAVIGATION BAR -->
-    <fx:include fx:id="sideNavBar" source="side-nav-bar.fxml"/>
+    <center>
+        <VBox fx:id="contentArea"
+              styleClass="dip-content"
+              spacing="20"
+              alignment="CENTER">
 
-    <!-- MAIN CONTENT AREA -->
-    <VBox fx:id="contentArea"
-          styleClass="dip-content"
-          spacing="20"
-          HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
 
-        <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
-        </padding>
+            <Label text="Edit Image" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
 
-        <Label text="Edit Image" styleClass="dip-title"/>
+            <!-- CENTER WRAPPER -->
+            <VBox alignment="CENTER">
 
-        <!-- CENTER WRAPPER -->
-        <VBox alignment="CENTER"
-              maxHeight="800"
-              minHeight="750">
+                <!-- MAIN CONTENT -->
+                <HBox spacing="20"
+                      alignment="TOP_CENTER">
 
-            <!-- SPLIT LAYOUT -->
-            <HBox spacing="20"
-                  alignment="CENTER"
-                  styleClass="image-card">
+                    <!-- LEFT: IMAGE -->
+                    <VBox fx:id="imageContainer"
+                          alignment="CENTER"
+                          VBox.vgrow="ALWAYS"
+                          minHeight="600"
+                          prefHeight="600"
+                          maxHeight="650">
 
-                <!-- LEFT: IMAGE (FIXED ROTATION SPACE) -->
-                <VBox fx:id="imageContainer"
-                      alignment="CENTER"
-                      VBox.vgrow="ALWAYS"
-                      minHeight="600"
-                      prefHeight="600"
-                      maxHeight="650">
+                        <StackPane alignment="CENTER">
 
-                    <StackPane alignment="CENTER">
+                            <ImageView fx:id="imageView"
+                                       fitWidth="500"
+                                       fitHeight="500"
+                                       preserveRatio="true"/>
 
-                        <ImageView fx:id="imageView"
-                                   fitWidth="500"
-                                   fitHeight="500"
-                                   preserveRatio="true"/>
+                        </StackPane>
 
-                    </StackPane>
+                    </VBox>
 
-                </VBox>
+                    <!-- RIGHT: CONTROLS -->
+                    <VBox spacing="15"
+                          prefWidth="500"
+                          alignment="CENTER_LEFT">
 
-                <!-- RIGHT: CONTROLS -->
-                <VBox spacing="15"
-                      prefWidth="500"
-                      alignment="CENTER_LEFT" >
+                        <!-- CONTRAST -->
+                        <HBox spacing="10">
+                            <Label text="Contrast"
+                                   alignment="CENTER"
+                                   minWidth="120"
+                                   prefWidth="120"
+                                   maxWidth="120" 
+                                   style ="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
 
-                    <!-- CONTRAST -->
-                    <HBox spacing="10">
-                        <Label text="Contrast"
-                               alignment="CENTER"
-                               styleClass="chip-label"
-                               minWidth="120"
-                               prefWidth="120"
-                               maxWidth="120"/>
+                            <Slider fx:id="contrastSlider"
+                                    min="-1"
+                                    max="1"
+                                    HBox.hgrow="ALWAYS"
+                                    maxWidth="Infinity" 
+                                    styleClass = "slider"/>
+                        </HBox>
 
-                        <Slider fx:id="contrastSlider" min="-1" max="1" HBox.hgrow="ALWAYS"
-        maxWidth="Infinity"/>
-                    </HBox>
+                        <!-- BRIGHTNESS -->
+                        <HBox spacing="10">
+                            <Label text="Brightness"
+                                   alignment="CENTER"
+                                   minWidth="120"
+                                   prefWidth="120"
+                                   maxWidth="120"
+                                   style ="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
 
-                    <!-- BRIGHTNESS -->
-                    <HBox spacing="10">
-                        <Label text="Brightness"
-                               alignment="CENTER"
-                               styleClass="chip-label"
-                               minWidth="120"
-                               prefWidth="120"
-                               maxWidth="120"/>
+                            <Slider fx:id="brightnessSlider"
+                                    min="-1"
+                                    max="1"
+                                    HBox.hgrow="ALWAYS"
+                                    maxWidth="Infinity" 
+                                    styleClass = "slider"/>
+                        </HBox>
 
-                        <Slider fx:id="brightnessSlider" min="-1" max="1" HBox.hgrow="ALWAYS"
-        maxWidth="Infinity"/>
-                    </HBox>
+                        <!-- FRAME -->
+                        <HBox spacing="10">
+                            <Label text="Frame"
+                                   alignment="CENTER"
+                                   minWidth="120"
+                                   prefWidth="120"
+                                   maxWidth="120" 
+                                   style ="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
 
-                    <!-- FRAME -->
-                    <HBox spacing="10">
-                        <Label text="Frame"
-                               alignment="CENTER"
-                               styleClass="chip-label"
-                               minWidth="120"
-                               prefWidth="120"
-                               maxWidth="120"/>
+                            <Button text="Add/Remove Frame"
+                                    onAction="#toggleFrame" 
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
 
-                        <Button text="Add/Remove Frame"
-                                onAction="#toggleFrame"
-                                styleClass="dip-btn"/>
+                            <Button text="Change Frame"
+                                    onAction="#changeFrameStyle" 
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
+                        </HBox>
 
-                        <Button text="Change Frame"
-                                onAction="#togglePolaroid"
-                                styleClass="dip-btn"/>
-                    </HBox>
+                        <!-- GRAYSCALE -->
+                        <HBox spacing="10">
+                            <Label text="Grayscale"
+                                   alignment="CENTER"
+                                   minWidth="120"
+                                   prefWidth="120"
+                                   maxWidth="120" 
+                                   style ="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
 
-                    <!-- GRAYSCALE -->
-                    <HBox spacing="10">
-                        <Label text="Grayscale"
-                               alignment="CENTER"
-                               styleClass="chip-label"
-                               minWidth="120"
-                               prefWidth="120"
-                               maxWidth="120"/>
+                            <Button text="Gray"
+                                    onAction="#applyGrayscale"  
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
+                        </HBox>
 
-                        <Button text="Gray"
-                                onAction="#applyGrayscale"
-                                styleClass="dip-btn"/>
-                    </HBox>
+                        <!-- TRANSFORM TITLE -->
+                        <HBox alignment="CENTER"
+                              HBox.hgrow="ALWAYS"
+                              maxWidth="Infinity">
 
-                    <!-- TRANSFORM (CENTERED) -->
-                    <HBox alignment="CENTER"
-                          HBox.hgrow="ALWAYS"
-                          maxWidth="Infinity">
+                            <Label text="Transform"
+                                   maxWidth="Infinity"
+                                   alignment="CENTER"
+                                   HBox.hgrow="ALWAYS" 
+                                   style ="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
 
-                        <Label text="Transform"
-                               styleClass="chip-label"
-                               maxWidth="Infinity"
-                               alignment="CENTER"
-                               HBox.hgrow="ALWAYS"/>
+                        </HBox>
 
-                    </HBox>
+                        <!-- TRANSFORM BUTTONS -->
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button text="Rotate"
+                                    onAction="#rotateImage" 
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
 
-                    <!-- TRANSFORM BUTTONS -->
-                    <HBox spacing="10" alignment="CENTER">
-                        <Button text="Rotate"
-                                onAction="#rotateImage"
-                                styleClass="dip-btn"/>
+                            <Button text="Flip Horizontal"
+                                    onAction="#flipHorizontal" 
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
 
-                        <Button text="Flip Horizontal"
-                                onAction="#flipHorizontal"
-                                styleClass="dip-btn"/>
+                            <Button text="Flip Vertical"
+                                    onAction="#flipVertical" 
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
+                        </HBox>
 
-                        <Button text="Flip Vertical"
-                                onAction="#flipVertical"
-                                styleClass="dip-btn"/>
-                    </HBox>
+                        <!-- OBJECT -->
+                        <HBox alignment="CENTER"
+                              HBox.hgrow="ALWAYS"
+                              maxWidth="Infinity">
 
-                    <!-- OBJECT -->
-                    <HBox alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                        <Button text="Select Object"
-                                onAction="#openObjectSelection"
-                                styleClass="dip-btn-secondary"
-                                HBox.hgrow="ALWAYS"
-                                maxWidth="Infinity"/>
-                    </HBox>
+                            <Button text="Select Object"
+                                    onAction="#openObjectSelection"
+                                    HBox.hgrow="ALWAYS"
+                                    maxWidth="Infinity" 
+                                    style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
+                        </HBox>
 
-                    <!-- SAVE -->
-                    <HBox spacing="10" alignment="CENTER">
-                        <Button text="Revert"
-                                onAction="#revertImage"
-                                styleClass="dip-btn-secondary"/>
+                        <!-- SAVE / REVERT -->
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button text="Revert"
+                                    onAction="#revertImage" 
+                                    style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
 
-                        <Button text="Save Edit"
-                                onAction="#saveEditedImage"
-                                styleClass="dip-btn-secondary"/>
-                    </HBox>
+                            <Button text="Save Edit"
+                                    onAction="#saveEditedImage" 
+                                    style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
+                        </HBox>
 
-                </VBox>
+                        <!-- BACK -->
+                        <HBox alignment="CENTER">
+                            <Button text="Back"
+                                    onAction="#goBack" 
+                                    style="-fx-background-color: #5A3C2E; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
+                        </HBox>
 
-            </HBox>
+                    </VBox>
+
+                </HBox>
+
+            </VBox>
 
         </VBox>
+    </center>
 
-    </VBox>
-
-</HBox>
+</BorderPane>
