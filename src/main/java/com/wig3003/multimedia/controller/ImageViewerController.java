@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 
 import com.wig3003.multimedia.service.PhotoLibraryService;
 import java.nio.file.Path;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class ImageViewerController {
 
@@ -21,7 +23,6 @@ public class ImageViewerController {
 
     @FXML
     private Button saveAnnotationButton;
-
 
     @FXML
     private Button editImageButton;
@@ -39,7 +40,10 @@ public class ImageViewerController {
     public void initialize() {
         saveAnnotationButton.setOnAction(event -> saveAnnotation());
         // favoriteButton.setOnAction(event -> toggleFavorite());
-        editImageButton.setOnAction(event -> editImage());
+        editImageButton.setOnAction(event -> {
+            System.out.println("EDIT CLICK REGISTERED");
+            editImage();
+        });
         shareImageButton.setOnAction(event -> shareImage());
         deleteImageButton.setOnAction(event -> deleteImage());
     }
@@ -72,8 +76,28 @@ public class ImageViewerController {
     }
 
     private void editImage() {
-        System.out.println("Edit image clicked");
+    try {
+        if (currentImage == null) {
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/fxml/dip-view.fxml")
+        );
+
+        Parent root = loader.load();
+
+        DipController controller = loader.getController();
+        controller.setImage(currentImage, imageUri);
+
+        // use SAME window instead of new Stage
+        Stage stage = (Stage) fullImageView.getScene().getWindow();
+        stage.getScene().setRoot(root);
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 
     private void shareImage() {
         System.out.println("Share image clicked");
