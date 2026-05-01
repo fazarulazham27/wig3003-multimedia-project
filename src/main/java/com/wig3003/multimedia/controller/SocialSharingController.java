@@ -1,6 +1,7 @@
 package com.wig3003.multimedia.controller;
 
 import com.wig3003.multimedia.service.SessionManager;
+import com.wig3003.multimedia.service.PhotoLibraryService;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import javafx.application.Platform;
@@ -11,6 +12,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -25,6 +28,36 @@ import java.util.List;
 import java.util.Properties;
 
 public class SocialSharingController {
+
+    // ── STATIC PENDING FILE HOLDER ────────────────────
+    private static java.io.File pendingShareFile = null;
+
+    public static void setPendingShareFile(java.io.File file) {
+        pendingShareFile = file;
+    }
+
+    private static java.io.File getPendingShareFile() {
+        return pendingShareFile;
+    }
+
+    private static void clearPendingShareFile() {
+        pendingShareFile = null;
+    }
+
+    // ── STATIC PENDING TAB HOLDER ─────────────────────
+    private static String pendingTab = null;
+
+    public static void setPendingTab(String tab) {
+        pendingTab = tab; // "email" or "whatsapp"
+    }
+
+    private static String getPendingTab() {
+        return pendingTab;
+    }
+
+    private static void clearPendingTab() {
+        pendingTab = null;
+    }
 
     // ── FXML FIELDS ────────────────────────────────────
 
@@ -98,6 +131,26 @@ public class SocialSharingController {
 
         if (sideNavBarController != null) {
             sideNavBarController.setActiveModuleButton("social");
+        }
+        java.io.File pendingFile = getPendingShareFile();
+        String tab = getPendingTab();
+
+        if (pendingFile != null && pendingFile.exists()) {
+            if ("email".equals(tab)) {
+                addEmailAttachment(pendingFile);
+            } else if ("whatsapp".equals(tab)) {
+                addWhatsAppPhoto(pendingFile);
+            }
+            clearPendingShareFile();
+        }
+
+        if (tab != null) {
+            if ("email".equals(tab)) {
+                switchToEmail();
+            } else if ("whatsapp".equals(tab)) {
+                switchToWhatsApp();
+            }
+            clearPendingTab();
         }
     }
 
@@ -253,8 +306,7 @@ public class SocialSharingController {
 
     @FXML
     public void onPickFromGalleryEmail() {
-        // Stub — wire to photo repository module
-        onBrowseEmailAttachment();
+        showPhotoGalleryDialog(true); // true = email
     }
 
     private void refreshEmailAttachmentList() {
@@ -419,8 +471,7 @@ public class SocialSharingController {
 
     @FXML
     public void onPickFromGalleryWA() {
-        // Stub — wire to photo repository module
-        onBrowseWAPhotos();
+        showPhotoGalleryDialog(false); // false = whatsapp
     }
 
     private void refreshWAPhotoList() {
@@ -437,7 +488,113 @@ public class SocialSharingController {
         }
     }
 
-    // ── WHATSAPP WEB ───────────────────────────────────
+    /**
+     * Show a gallery picker dialog with all photos from the library
+     * @param isEmail true for email attachments, false for WhatsApp photos
+     */
+    private void showPhotoGalleryDialog(boolean isEmail) {
+        Dialog<List<File>> dialog = new Dialog<>();
+        dialog.setTitle("Select Photos");
+        dialog.setHeaderText("Select photos from your library");
+        dialog.getDialogPane().getButtonTypes().addAll(
+            new ButtonType("Add Selected", ButtonBar.ButtonData.OK_DONE),
+            ButtonType.CANCEL
+        );
+
+        // Create a grid to display photos
+        TilePane photoGrid = new TilePane();
+        photoGrid.setHgap(10);
+        photoGrid.setVgap(10);
+        photoGrid.setPrefColumns(4);
+        photoGrid.setStyle("-fx-padding: 10;");
+
+        // Keep track of selected files
+        List<File> selectedFiles = new ArrayList<>();
+
+        // Load all photos from the library
+        List<Path> libraryPhotos = PhotoLibraryService.getLibraryPhotos();
+
+        if (libraryPhotos.isEmpty()) {
+            dialog.setHeaderText("No photos in library");
+            dialog.setContentText("Your photo library is empty. Import photos first.");
+            dialog.showAndWait();
+            return;
+        }
+
+        for (Path path : libraryPhotos) {
+            try {
+                File photoFile = path.toFile();
+                Image image = new Image(path.toUri().toString());
+
+                ImageView imageView = new ImageView(image);
+                imageView.setFitWidth(120);
+                imageView.setFitHeight(120);
+                imageView.setPreserveRatio(false);
+                imageView.setSmooth(true);
+                imageView.setCache(true);
+
+                // Create a selection wrapper
+                StackPane photoWrapper = new StackPane(imageView);
+                photoWrapper.setPrefSize(120, 120);
+                photoWrapper.setStyle("-fx-border-color: #D7BFA7; -fx-border-radius: 8; "
+                    + "-fx-border-width: 2; -fx-cursor: hand;");
+
+                // Track selection state
+                final boolean[] isSelected = {false};
+                Label checkmark = new Label("✓");
+                checkmark.setStyle("-fx-font-size: 24px; -fx-text-fill: #2E7D4F; -fx-font-weight: bold;");
+                checkmark.setVisible(false);
+                StackPane.setAlignment(checkmark, javafx.geometry.Pos.CENTER);
+                photoWrapper.getChildren().add(checkmark);
+
+                // Click to select/deselect
+                photoWrapper.setOnMouseClicked(event -> {
+                    isSelected[0] = !isSelected[0];
+                    if (isSelected[0]) {
+                        selectedFiles.add(photoFile);
+                        photoWrapper.setStyle("-fx-border-color: #2E7D4F; -fx-border-radius: 8; "
+                            + "-fx-border-width: 3; -fx-cursor: hand;");
+                        checkmark.setVisible(true);
+                    } else {
+                        selectedFiles.remove(photoFile);
+                        photoWrapper.setStyle("-fx-border-color: #D7BFA7; -fx-border-radius: 8; "
+                            + "-fx-border-width: 2; -fx-cursor: hand;");
+                        checkmark.setVisible(false);
+                    }
+                });
+
+                photoGrid.getChildren().add(photoWrapper);
+
+            } catch (Exception e) {
+                System.err.println("Failed to load photo: " + path);
+                e.printStackTrace();
+            }
+        }
+
+        ScrollPane scrollPane = new ScrollPane(photoGrid);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(400);
+        dialog.getDialogPane().setContent(scrollPane);
+
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                return selectedFiles;
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(files -> {
+            if (!files.isEmpty()) {
+                if (isEmail) {
+                    emailAttachments.addAll(files);
+                    refreshEmailAttachmentList();
+                } else {
+                    waPhotos.addAll(files);
+                    refreshWAPhotoList();
+                }
+            }
+        });
+    }
 
     @FXML
     public void onOpenWhatsAppWeb() {
@@ -502,6 +659,26 @@ public class SocialSharingController {
     }
 
     // ── HELPERS ────────────────────────────────────────
+
+    /**
+     * Pre-populate an email attachment (called from ImageViewer)
+     */
+    public void addEmailAttachment(File file) {
+        if (file != null && file.exists() && !emailAttachments.contains(file)) {
+            emailAttachments.add(file);
+            refreshEmailAttachmentList();
+        }
+    }
+
+    /**
+     * Pre-populate a WhatsApp photo (called from ImageViewer)
+     */
+    public void addWhatsAppPhoto(File file) {
+        if (file != null && file.exists() && !waPhotos.contains(file)) {
+            waPhotos.add(file);
+            refreshWAPhotoList();
+        }
+    }
 
     public void setLoggedInEmail(String email) {
         if (senderEmailField != null) senderEmailField.setText(email);

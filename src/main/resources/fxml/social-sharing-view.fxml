@@ -107,7 +107,7 @@
                                                -fx-border-color: #D7BFA7; -fx-border-radius: 8;
                                                -fx-background-radius: 8; -fx-padding: 9 18;
                                                -fx-font-size: 13px; -fx-cursor: hand;"/>
-                                <Button text="🖼️  From All Photos" onAction="#onPickFromGalleryEmail"
+                                <Button text="📁  From All Photos" onAction="#onPickFromGalleryEmail"
                                         style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
                                                -fx-border-color: #D7BFA7; -fx-border-radius: 8;
                                                -fx-background-radius: 8; -fx-padding: 9 18;
@@ -163,7 +163,7 @@
                                                -fx-border-color: #D7BFA7; -fx-border-radius: 8;
                                                -fx-background-radius: 8; -fx-padding: 9 18;
                                                -fx-font-size: 13px; -fx-cursor: hand;"/>
-                                <Button text="🖼️  From All Photos" onAction="#onPickFromGalleryWA"
+                                <Button text="📁  From All Photos" onAction="#onPickFromGalleryWA"
                                         style="-fx-background-color: #F5F0EB; -fx-text-fill: #5A3C2E;
                                                -fx-border-color: #D7BFA7; -fx-border-radius: 8;
                                                -fx-background-radius: 8; -fx-padding: 9 18;
