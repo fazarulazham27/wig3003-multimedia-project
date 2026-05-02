@@ -63,6 +63,7 @@
             <Button text="Login"
                     onAction="#login"
                     styleClass="primary-btn"
+                    defaultButton="true"
                     maxWidth="Infinity"/>
 
             <Label fx:id="statusLabel" styleClass="status-text"/>
