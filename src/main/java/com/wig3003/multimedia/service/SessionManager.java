@@ -11,4 +11,14 @@ public class SessionManager {
     public static String getEmail() {
         return loggedInEmail;
     }
+
+    //  ADDED LOGOUT
+    public static void clear() {
+        loggedInEmail = "";
+    }
+
+    // Optional helper
+    public static boolean isLoggedIn() {
+        return loggedInEmail != null && !loggedInEmail.isBlank();
+    }
 }

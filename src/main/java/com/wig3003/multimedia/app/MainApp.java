@@ -35,7 +35,7 @@ public class MainApp extends Application {
         stage.setHeight(screenBounds.getHeight());
         stage.setMaximized(true);
 
-        stage.show();
+         stage.show();
     }
 
     public static MainApp getInstance() { 

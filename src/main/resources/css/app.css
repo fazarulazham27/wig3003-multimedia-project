@@ -130,6 +130,34 @@
 }
 
 .slider .thumb {
-    
     -fx-background-color: #5a3e2b;
+}
+
+/* ==========================================================
+   LOGOUT BUTTON (ADDED)
+========================================================== */
+
+.logout-btn {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 12 15;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+
+    -fx-cursor: hand;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 10, 0.2, 0, 3);
+}
+
+.logout-btn:hover {
+    -fx-background-color: #B71C1C;
+}
+
+.logout-btn:pressed {
+    -fx-background-color: #8E0000;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
 }

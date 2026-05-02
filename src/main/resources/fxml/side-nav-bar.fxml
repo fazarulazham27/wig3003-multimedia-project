@@ -29,7 +29,7 @@
             </clip>
         </ImageView>
         <Label text="PhotoManager"
-            style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
     </HBox>
 
     <Separator style="-fx-background-color: #D7BFA7;"/>
@@ -71,5 +71,15 @@
             maxWidth="Infinity"/>
 
     <Region VBox.vgrow="ALWAYS"/>
+
+    <!-- LOGOUT BUTTON -->
+    <HBox style="-fx-padding: 18 15 18 15;">
+        <Button text="🚪 Logout"
+                fx:id="logoutBtn"
+                styleClass="logout-btn"
+                onAction="#onLogoutClick"
+                maxWidth="Infinity"
+                HBox.hgrow="ALWAYS"/>
+    </HBox>
 
 </VBox>
