@@ -1,10 +1,14 @@
 package com.wig3003.multimedia.controller;
 
+import com.wig3003.multimedia.service.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 public class SideNavBarController {
 
@@ -13,6 +17,9 @@ public class SideNavBarController {
     @FXML private Button mosaicBtn;
     @FXML private Button videoBtn;
     @FXML private Button sharePhotosBtn;
+
+    // ✅ ADDED
+    @FXML private Button logoutBtn;
 
     private static SideNavBarController instance;
 
@@ -29,9 +36,11 @@ public class SideNavBarController {
     @FXML
     public void initialize() {
         instance = this;
+
         allPhotosBtn.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 setActiveModuleButton("repo", "all");
+
                 if (newScene.getWindow() != null) {
                     mainStage = (Stage) newScene.getWindow();
                 } else {
@@ -50,16 +59,14 @@ public class SideNavBarController {
      */
     @FXML
     public void onAllPhotosClick() {
-        // setActiveButton(allPhotosBtn);
         switchModule("repo", "all");
     }
-    
+
     /**
      * Navigate to Repository module with "annotated" filter
      */
     @FXML
     public void onAnnotatedClick() {
-        // setActiveButton(annotatedBtn);
         switchModule("repo", "annotated");
     }
 
@@ -68,7 +75,6 @@ public class SideNavBarController {
      */
     @FXML
     public void onMosaicClick() {
-        // setActiveButton(mosaicBtn);
         switchModule("mosaic", null);
     }
 
@@ -77,7 +83,6 @@ public class SideNavBarController {
      */
     @FXML
     public void onVideoClick() {
-        // setActiveButton(videoBtn);
         switchModule("video", null);
     }
 
@@ -86,15 +91,56 @@ public class SideNavBarController {
      */
     @FXML
     public void onSharePhotosClick() {
-        // setActiveButton(sharePhotosBtn);
         switchModule("social", null);
     }
-    
-    
+
+    // LOGOUT FUNCTION
+    @FXML
+    public void onLogoutClick() {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Logout");
+        confirm.setHeaderText("Confirm Logout");
+        confirm.setContentText("Are you sure you want to logout?");
+
+        if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
+
+        // Clear session
+        SessionManager.clear();
+
+        // Redirect back to login page
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) logoutBtn.getScene().getWindow();
+            Scene scene = new Scene(root);
+
+            // Optional: add CSS if you use it
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+
+            stage.setScene(scene);
+            stage.setTitle("Login");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Logout Error");
+            alert.setHeaderText("Failed to return to login page.");
+            alert.setContentText(e.getClass().getSimpleName() + ": " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
     private void setActiveButton(Button button) {
-        for (Button btn : new Button[]{allPhotosBtn, annotatedBtn, mosaicBtn, videoBtn, sharePhotosBtn}) {
+        for (Button btn : new Button[]{allPhotosBtn, annotatedBtn, mosaicBtn, videoBtn, sharePhotosBtn, logoutBtn}) {
             btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #F2E6D8; -fx-font-weight: normal; -fx-background-insets: 0; -fx-background-radius: 0; -fx-border-width: 0; -fx-padding: 12 15; -fx-cursor: hand;");
         }
+
         button.setStyle("-fx-background-color: #F2E6D8; -fx-text-fill: #6B4B3A; -fx-font-weight: bold; -fx-background-insets: 0; -fx-background-radius: 0; -fx-border-width: 0; -fx-padding: 12 15;");
     }
 
@@ -164,6 +210,7 @@ public class SideNavBarController {
             case "repo"   -> "annotated".equals(filter) ? annotatedBtn : allPhotosBtn;
             default       -> allPhotosBtn;
         };
+
         setActiveButton(target);
     }
 
