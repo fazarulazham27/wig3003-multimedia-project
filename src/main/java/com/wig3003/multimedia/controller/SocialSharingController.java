@@ -599,13 +599,13 @@ public class SocialSharingController {
     @FXML
     public void onOpenWhatsAppWeb() {
         String message = waMessageArea.getText().trim();
-        if (message.isBlank()) message = "Check out this photo! 📸";
+        if (message.isBlank()) message = "Check out this media! 📸";
 
         try {
-            boolean hasPhotos = !waPhotos.isEmpty();
+            boolean hasMedia = !waPhotos.isEmpty();
 
-            // Copy photo files to clipboard
-            if (hasPhotos) {
+            // Copy media files (images and videos) to clipboard
+            if (hasMedia) {
                 javafx.scene.input.ClipboardContent content =
                     new javafx.scene.input.ClipboardContent();
                 content.putFiles(waPhotos);
@@ -620,24 +620,24 @@ public class SocialSharingController {
 
             // CLEAR POPUP
             Alert clearConfirm = new Alert(Alert.AlertType.CONFIRMATION);
-                clearConfirm.setTitle("Clear Selection");
-                clearConfirm.setHeaderText("Clear selected photos?");
-                clearConfirm.setContentText(
-                    "Do you want to clear the selected photos for the next share?"
-                );
-                ButtonType yes = new ButtonType("Yes, clear", ButtonBar.ButtonData.YES);
-                ButtonType no  = new ButtonType("Keep them", ButtonBar.ButtonData.NO);
-                clearConfirm.getButtonTypes().setAll(yes, no);
-                clearConfirm.showAndWait().ifPresent(r -> {
-                    if (r == yes) {
-                        waPhotos.clear();
-                        refreshWAPhotoList();
-                        waMessageArea.setText(
-                            "Check out this photo from PhotoManager! 📸"
-                        );
-                        setStatus(waStatusLabel, "", true);
-                    }
-                });
+            clearConfirm.setTitle("Clear Selection");
+            clearConfirm.setHeaderText("Clear selected media?");
+            clearConfirm.setContentText(
+                "Do you want to clear the selected media for the next share?"
+            );
+            ButtonType yes = new ButtonType("Yes, clear", ButtonBar.ButtonData.YES);
+            ButtonType no  = new ButtonType("Keep them", ButtonBar.ButtonData.NO);
+            clearConfirm.getButtonTypes().setAll(yes, no);
+            clearConfirm.showAndWait().ifPresent(r -> {
+                if (r == yes) {
+                    waPhotos.clear();
+                    refreshWAPhotoList();
+                    waMessageArea.setText(
+                        "Check out this media from PhotoManager! 📸"
+                    );
+                    setStatus(waStatusLabel, "", true);
+                }
+            });
         } catch (Exception e) {
             // FAIL POPUP
             Alert fail = new Alert(Alert.AlertType.ERROR);
@@ -686,10 +686,9 @@ public class SocialSharingController {
 
     private List<File> browseFiles(javafx.scene.Scene scene) {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Select Photos");
+        chooser.setTitle("Select Files");
         chooser.getExtensionFilters().add(
-            new FileChooser.ExtensionFilter("Images",
-                "*.jpg", "*.jpeg", "*.png", "*.gif", "*.bmp", "*.webp")
+            new FileChooser.ExtensionFilter("Media Files", "*.jpg", "*.jpeg", "*.png", "*.gif", "*.bmp", "*.webp", "*.mp4", "*.avi", "*.mov")
         );
         return chooser.showOpenMultipleDialog((Stage) scene.getWindow());
     }
