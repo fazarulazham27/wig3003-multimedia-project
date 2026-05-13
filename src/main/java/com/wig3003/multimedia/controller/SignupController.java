@@ -57,15 +57,19 @@ public class SignupController {
 
         String response = AuthService.signup(email, password);
 
-        // 🔥 HANDLE FIREBASE RESPONSE PROPERLY
-        if (AuthService.isSuccess(response)) {
+        // PRINT FIREBASE RESPONSE IN TERMINAL (FOR PRESENTATION)
+        System.out.println("========== FIREBASE SIGNUP RESPONSE ==========");
+        System.out.println(response);
+        System.out.println("=============================================");
 
+        // HANDLE FIREBASE RESPONSE
+        if (AuthService.isSuccess(response)) {
             showAlert("Success", "Account created successfully!");
             goToLogin();
             return;
         }
 
-        // ❌ EXTRACT FIREBASE ERROR MESSAGE
+        // ERROR HANDLING
         if (response.contains("WEAK_PASSWORD")) {
             showAlert("Signup Failed", "Password must be at least 6 characters");
             return;
@@ -99,7 +103,7 @@ public class SignupController {
 
             Scene newScene = new Scene(loader.load());
             newScene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
-            
+
             stage.setScene(newScene);
             stage.setTitle(title);
 
