@@ -39,7 +39,7 @@ public class ObjectSelectionController {
     private final List<List<double[]>> strokes = new ArrayList<>();
     private List<double[]> currentStroke;
 
-    // ================= INIT =================
+    // ================= INITIALIZE =================
     @FXML
     public void initialize() {
 
@@ -196,9 +196,7 @@ public class ObjectSelectionController {
         return (int) ((canvasY - d[3]) * d[5]);
     }
 
-    /**
-     * returns: [imageW, imageH, offsetX, offsetY, scaleX, scaleY]
-     */
+    // returns: [imageW, imageH, offsetX, offsetY, scaleX, scaleY]
     private double[] getDisplayInfo() {
 
         double imgW = image.getWidth();

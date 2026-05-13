@@ -10,7 +10,9 @@ public class ImageProcessor {
     // ================= BRIGHTNESS + CONTRAST =================
     public static Image adjustImage(Image image, double brightness, double contrast) {
 
-        if (image == null) return null;
+        if (image == null) {
+            return null;
+        }
 
         int width = (int) image.getWidth();
         int height = (int) image.getHeight();
@@ -18,7 +20,9 @@ public class ImageProcessor {
         WritableImage output = new WritableImage(width, height);
 
         PixelReader reader = image.getPixelReader();
-        if (reader == null) return image;
+        if (reader == null) {
+            return image;
+        }
 
         PixelWriter writer = output.getPixelWriter();
 
@@ -48,7 +52,9 @@ public class ImageProcessor {
     // ================= GRAYSCALE =================
     public static Image convertToGrayscale(Image image) {
 
-        if (image == null) return null;
+        if (image == null) {
+            return null;
+        }
 
         int width = (int) image.getWidth();
         int height = (int) image.getHeight();
@@ -56,7 +62,9 @@ public class ImageProcessor {
         WritableImage output = new WritableImage(width, height);
 
         PixelReader reader = image.getPixelReader();
-        if (reader == null) return image;
+        if (reader == null) {
+            return image;
+        }
 
         PixelWriter writer = output.getPixelWriter();
 
@@ -87,7 +95,9 @@ public class ImageProcessor {
     // ================= FRAME CORE =================
     private static Image addBorder(Image image, double percent, Color fxColor) {
 
-        if (image == null) return null;
+        if (image == null) {
+            return null;
+        }
 
         BufferedImage src = javafx.embed.swing.SwingFXUtils.fromFXImage(image, null);
 
@@ -122,7 +132,9 @@ public class ImageProcessor {
     // ================= POLAROID =================
     private static Image addPolaroid(Image image, double percent, Color fxColor) {
 
-        if (image == null) return null;
+        if (image == null) {
+            return null;
+        }
 
         BufferedImage src = javafx.embed.swing.SwingFXUtils.fromFXImage(image, null);
 
@@ -160,5 +172,17 @@ public class ImageProcessor {
     // ================= CLAMP =================
     private static double clamp(double v) {
         return Math.max(0, Math.min(1, v));
+    }
+
+    // ================= Resize =================
+    public static Image resizeImage(Image image, int width, int height) {
+
+        ImageView imageView = new ImageView(image);
+
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        imageView.setPreserveRatio(true);
+
+        return imageView.snapshot(null, null);
     }
 }
