@@ -24,7 +24,7 @@
             <Label text="Object Selection Tool"
                    style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
 
-            <Label text="Click or circle on object to select region by color similarity" style = "-fx-text-fill: #5A3C2E;"/>
+            <Label text="Draw line on object to select region by color similarity" style = "-fx-text-fill: #5A3C2E;"/>
         </VBox>
     </top>
 

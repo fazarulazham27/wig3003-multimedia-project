@@ -32,10 +32,7 @@
                     <!-- LEFT: IMAGE -->
                     <VBox fx:id="imageContainer"
                           alignment="CENTER"
-                          VBox.vgrow="ALWAYS"
-                          minHeight="600"
-                          prefHeight="600"
-                          maxHeight="650">
+                          VBox.vgrow="ALWAYS">
 
                         <StackPane alignment="CENTER">
 
@@ -52,6 +49,27 @@
                     <VBox spacing="15"
                           prefWidth="500"
                           alignment="CENTER_LEFT">
+                        
+                        <!-- Scale -->
+                        <HBox spacing="10">
+                            <Label text="Display"
+                                   alignment="CENTER"
+                                   minWidth="120"
+                                   prefWidth="120"
+                                   maxWidth="120" 
+                                   style ="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #5A3C2E;"/>
+
+                            <Button text="Increase size"
+                                    onAction="#increaseSize"
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                           -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
+
+                            <Button text="Decrease size"
+                                    onAction="#decreaseSize"
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                           -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
+
+                        </HBox>
 
                         <!-- CONTRAST -->
                         <HBox spacing="10">
@@ -152,7 +170,26 @@
                                     style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
                                             -fx-background-radius: 8; -fx-padding: 8; -fx-cursor: hand;" />
                         </HBox>
+                        <HBox spacing="10" alignment="CENTER">
 
+                            <Button text="Left" onAction="#moveLeft"
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 5; -fx-padding: 5; -fx-cursor: hand;"/>
+                            
+                            <Button text="Right" onAction="#moveRight"
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 5; -fx-padding: 5; -fx-cursor: hand;"/>
+                            
+                            <Button text="Up" onAction="#moveUp"
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 5; -fx-padding: 5; -fx-cursor: hand;"/>
+                            
+                            <Button text="Down" onAction="#moveDown"
+                                    style="-fx-background-color: #D7A57B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;
+                                            -fx-background-radius: 5; -fx-padding: 5; -fx-cursor: hand;"/>
+
+                        </HBox>
+                        
                         <!-- OBJECT -->
                         <HBox alignment="CENTER"
                               HBox.hgrow="ALWAYS"

@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 public class DipController {
 
@@ -27,13 +29,24 @@ public class DipController {
 
     @FXML
     private Slider brightnessSlider;
+    @FXML
+    private VBox imageContainer;
 
     private Image originalImage;
+    private Image baseImage;
     private Image workingImage;
+    
     private String imageUri;
 
     private boolean grayscale = false;
     private boolean frameOn = false;
+    private double resizeScale = 1.0;
+
+    private double rotateAngle = 0;
+    private double flipX = 1;
+    private double flipY = 1;
+    private double translateX = 0;
+    private double translateY = 0;
 
     private FrameStyle frameStyle = FrameStyle.NORMAL;
 
@@ -42,30 +55,35 @@ public class DipController {
         POLAROID
     }
 
-    // ================= INIT =================
+    // ================= INITIALIZE =================
     @FXML
     public void initialize() {
         contrastSlider.valueProperty().addListener((o, a, b) -> updateImage());
         brightnessSlider.valueProperty().addListener((o, a, b) -> updateImage());
+        
+        imageView.setPreserveRatio(true);
+        clipImageArea();
     }
 
     public void setImage(Image image, String uri) {
         this.originalImage = image;
         this.workingImage = image;
+        this.baseImage = image;
         this.imageUri = uri;
 
-        resetControls();
+        resetTransforms();
         updateImage();
     }
 
-    // ================= PIPELINE =================
+    // ================= Update Image =================
     private void updateImage() {
-        if (originalImage == null) {
+
+        if (baseImage == null) {
             return;
         }
 
         Image img = ImageProcessor.adjustImage(
-                originalImage,
+                baseImage,
                 brightnessSlider.getValue(),
                 contrastSlider.getValue()
         );
@@ -82,6 +100,18 @@ public class DipController {
 
         workingImage = img;
         imageView.setImage(img);
+
+        applyTransforms(); // apply zoom or rotate or flip after image update
+    }
+
+    private void clipImageArea() {
+
+        Rectangle clip = new Rectangle();
+
+        clip.widthProperty().bind(imageContainer.widthProperty());
+        clip.heightProperty().bind(imageContainer.heightProperty());
+
+        imageContainer.setClip(clip);
     }
 
     // ================= GRAYSCALE =================
@@ -110,17 +140,73 @@ public class DipController {
     // ================= TRANSFORMS =================
     @FXML
     private void rotateImage() {
-        imageView.setRotate(imageView.getRotate() + 90);
+        rotateAngle += 90;
+        applyTransforms();
     }
 
     @FXML
     private void flipHorizontal() {
-        imageView.setScaleX(imageView.getScaleX() * -1);
+        flipX *= -1;
+        applyTransforms();
     }
 
     @FXML
     private void flipVertical() {
-        imageView.setScaleY(imageView.getScaleY() * -1);
+        flipY *= -1;
+        applyTransforms();
+    }
+
+    @FXML
+    private void increaseSize() {
+        resizeScale += 0.1;
+        applyTransforms();
+    }
+
+    @FXML
+    private void decreaseSize() {
+        if (resizeScale > 0.2) {
+            resizeScale -= 0.1;
+        }
+        applyTransforms();
+    }
+
+    private void applyTransforms() {
+
+        imageView.setFitWidth(500 * resizeScale);
+        imageView.setFitHeight(500 * resizeScale);
+
+        imageView.setScaleX(flipX);
+        imageView.setScaleY(flipY);
+
+        imageView.setRotate(rotateAngle);
+
+        // move
+        imageView.setTranslateX(translateX);
+        imageView.setTranslateY(translateY);
+    }
+
+    @FXML
+    private void moveLeft() {
+        translateX = Math.max(-100, translateX - 20);
+        applyTransforms();
+    }
+
+    @FXML
+    private void moveRight() {
+        translateX = Math.min(100, translateX + 20);
+        applyTransforms();
+    }
+
+    @FXML
+    private void moveUp() {
+        translateY -= 20;
+        applyTransforms();
+    }
+
+    @FXML
+    private void moveDown() {
+        translateY += 20;
+        applyTransforms();
     }
 
     // ================= OBJECT =================
@@ -144,7 +230,7 @@ public class DipController {
         }
     }
 
-    // ================= SAVE (FIXED) =================
+    // ================= SAVE =================
     @FXML
     private void saveEditedImage() {
 
@@ -154,7 +240,7 @@ public class DipController {
                 return;
             }
 
-            // capture EVERYTHING (brightness, contrast, grayscale, frame, rotation, flip)
+            // capture everything (brightness, contrast, grayscale, frame, rotation, flip)
             Image snapshot = imageView.snapshot(null, null);
 
             BufferedImage img = SwingFXUtils.fromFXImage(snapshot, null);
@@ -177,7 +263,7 @@ public class DipController {
         }
     }
 
-    // ================= BACK (FIXED) =================
+    // ================= BACK  =================
     @FXML
     private void goBack() {
         try {
@@ -209,25 +295,23 @@ public class DipController {
         contrastSlider.setValue(0);
         brightnessSlider.setValue(0);
 
-        imageView.setRotate(0);
-        imageView.setScaleX(1);
-        imageView.setScaleY(1);
-
         workingImage = originalImage;
+        baseImage = originalImage;
+
         imageView.setImage(originalImage);
+
+        resetTransforms();
     }
 
     // ================= RESET =================
-    private void resetControls() {
-        grayscale = false;
-        frameOn = false;
-        frameStyle = FrameStyle.NORMAL;
+    private void resetTransforms() {
+        resizeScale = 1.0;
+        rotateAngle = 0;
+        flipX = 1;
+        flipY = 1;
+        translateX = 0;
+        translateY = 0;
 
-        contrastSlider.setValue(0);
-        brightnessSlider.setValue(0);
-
-        imageView.setRotate(0);
-        imageView.setScaleX(1);
-        imageView.setScaleY(1);
+        applyTransforms();
     }
 }
